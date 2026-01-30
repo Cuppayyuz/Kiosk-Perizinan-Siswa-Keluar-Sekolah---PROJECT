@@ -1,0 +1,14 @@
+library python yang digunakan untuk membangun aplikasi web:
+
+flask
+mysql-connector-python
+
+///read.me 
+langkah-langkah pembuatan tampilan aplikasi web untuk admin dan guru :
+1. buat sebuah database "mysql"(jika sistem online) dengan nama "kiosk_db"(opsional) dan buat tabel sesuai kebutuhan aplikasi web.
+2. jika menggunakan sistem offline saya buat di http://github//
+3. tabel database yang saya sarankan :
+    - tabel "guru" untuk menyimpan data user admin dan guru
+    - tabel "siswa" untuk menyimpan data siswa
+    - tabel "tranksasi_izin" untuk menyimpan data transaksi pembayaran
+4. lalu sambungkan databse ke dalam python dengan file python yaitu(webapp\config.py dan Desktop\modules\databse_client.py)

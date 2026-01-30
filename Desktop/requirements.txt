@@ -1,0 +1,10 @@
+library python yang digunakan :
+
+customtkinter
+opencv-python
+pillow
+mysql-connector-python
+pyserial
+python-escpos
+
+
