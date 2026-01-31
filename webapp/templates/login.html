@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Guru - Smart Exit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .card-login { border: none; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); width: 100%; max-width: 400px; }
+        .form-control { border-radius: 25px; padding: 12px 20px; }
+        .btn-login { border-radius: 25px; padding: 12px; font-weight: bold; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center">
+        <div class="card card-login p-4 bg-white">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold text-primary">👋 Halo Guru!</h3>
+                <p class="text-muted">Silakan login untuk membuat token</p>
+            </div>
+
+            {% if msg %}
+            <div class="alert alert-danger text-center shadow-sm" role="alert">
+                {{ msg }}
+            </div>
+            {% endif %}
+
+            <form action="/" method="POST">
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold ms-2">Username</label>
+                    <input type="text" name="username" class="form-control" placeholder="Masukkan username..." required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold ms-2">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Masukkan password..." required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 btn-login shadow">MASUK SEKARANG</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
