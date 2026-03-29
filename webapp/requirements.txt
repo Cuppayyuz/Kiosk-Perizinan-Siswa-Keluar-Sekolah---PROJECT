@@ -12,4 +12,5 @@ langkah-langkah pembuatan tampilan aplikasi web untuk admin dan guru :
     - tabel "siswa" untuk menyimpan data siswa
     - tabel "tranksasi_izin" untuk menyimpan data transaksi pembayaran
 4. lalu sambungkan databse ke dalam python dengan file python (webapp\config.py dan Desktop\modules\databse_client.py)
-5.buat tampilan dashboard guru dan sambungkan ke token 
+5. buat tampian login yang langsung menyambung ke database
+6.buat tampilan dashboard guru dan sambungkan ke token 

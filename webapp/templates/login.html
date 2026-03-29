@@ -4,43 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Guru - Smart Exit</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .card-login { border: none; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); width: 100%; max-width: 400px; }
-        .form-control { border-radius: 25px; padding: 12px 20px; }
-        .btn-login { border-radius: 25px; padding: 12px; font-weight: bold; letter-spacing: 1px; }
-    </style>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gradient-to-br from-blue-500 to-indigo-700 min-h-screen flex items-center justify-center font-sans">
 
-    <div class="container d-flex justify-content-center">
-        <div class="card card-login p-4 bg-white">
-            <div class="text-center mb-4">
-                <h3 class="fw-bold text-primary">👋 Halo Guru!</h3>
-                <p class="text-muted">Silakan login untuk membuat token</p>
+    <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl hover:scale-[1.01] transition-transform duration-300">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Login</h1>
+            <p class="text-md font-bold text-gray-500">untuk masuk ke dashboard</p>
+        </div>
+
+        {% if msg %}
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-sm" role="alert">
+            <p class="font-bold">Gagal Masuk</p>
+            <p>{{ msg }}</p>
+        </div>
+        {% endif %}
+
+        <form action="/" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 ml-1">Username</label>
+                <input type="text" name="username" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" placeholder="Masukkan username..." required>
             </div>
 
-            {% if msg %}
-            <div class="alert alert-danger text-center shadow-sm" role="alert">
-                {{ msg }}
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 ml-1">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" placeholder="Masukkan password..." required>
             </div>
-            {% endif %}
 
-            <form action="/" method="POST">
-                
-                <div class="mb-3">
-                    <label class="form-label fw-bold ms-2">Username</label>
-                    <input type="text" name="username" class="form-control" placeholder="Masukkan username..." required>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label fw-bold ms-2">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Masukkan password..." required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 btn-login shadow">MASUK SEKARANG</button>
-            </form>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95">
+                MASUK SEKARANG
+            </button>
+        </form>
+        
+        <div class="mt-6 text-center text-sm text-gray-300">
+            &copy; 2026 Smart Exit System
         </div>
     </div>
 
