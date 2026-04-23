@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Pantau Kelas - Smart Exit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card-pantau { border-radius: 15px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .update-row { animation: highlight 1.5s ease-out; }
+        @keyframes highlight {
+            0% { background-color: #d1e7dd; }
+            100% { background-color: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <span class="navbar-brand fw-bold text-warning"><i class="fa-solid fa-satellite-dish me-2"></i>Live Monitor Smart-Exit</span>
+            <div class="d-flex align-items-center text-white">
+                <span class="me-3"><i class="fa-solid fa-user me-1"></i> {{ nama }}</span>
+                <a href="/logout" class="btn btn-sm btn-outline-danger"><i class="fas fa-power-off"></i> Keluar</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-8 text-center">
+                <h3 class="fw-bold text-secondary">Daftar Siswa Izin Keluar (Hari Ini)</h3>
+                <p class="text-muted">Data otomatis diperbarui setiap 3 detik. Gunakan pencarian untuk menyaring kelas Anda.</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <div class="input-group input-group-lg shadow-sm">
+                    <span class="input-group-text bg-white text-primary border-end-0"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="filterKelas" class="form-control border-start-0" placeholder="Ketik nama kelas Anda (Contoh: XII RPL 1)..." onkeyup="filterTabel()">
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-pantau bg-white">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0 align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4">Jam Keluar</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
+                                <th>Jenis Izin</th>
+                                <th>Status Terkini</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabel-live">
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="fas fa-spinner fa-spin fa-2x mb-2"></i><br>Menghubungkan ke server...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4 text-muted small">
+            &copy; 2026 Smart Exit System - Halaman Pemantauan Khusus (Read-Only)
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // FUNGSI TARIK DATA DARI SERVER
+        function updateTabelPantau() {
+            fetch('/api/pantau_live')
+                .then(response => response.json())
+                .then(data => {
+                    let html = '';
+                    
+                    if (data.length === 0) {
+                        html = '<tr><td colspan="5" class="text-center py-4 text-muted">Belum ada siswa yang izin hari ini.</td></tr>';
+                    } else {
+                        data.forEach(row => {
+                            let badgeClass = row.status === 'WAITING' ? 'bg-warning text-dark' : 'bg-success';
+                            let iconStatus = row.status === 'WAITING' ? '<i class="fas fa-walking"></i> Menuju Gerbang' : '<i class="fas fa-check-circle"></i> Sudah Keluar';
+                            
+                            // Jika siswa belum tap RFID di Kiosk, namanya masih kosong
+                            let namaSiswa = row.nama_siswa ? row.nama_siswa : '<span class="text-muted fst-italic">Belum Scan Kiosk</span>';
+                            let kelasSiswa = row.kelas ? row.kelas : '-';
+
+                            // Format Waktu HANYA JAM (Contoh: 10:15:30)
+                            let jamSaja = row.waktu_dibuat ? row.waktu_dibuat.split(' ')[1] : '-';
+
+                            html += `
+                            <tr class="baris-data">
+                                <td class="ps-4 font-monospace">${jamSaja}</td>
+                                <td class="fw-bold">${namaSiswa}</td>
+                                <td class="kelas-cell">${kelasSiswa}</td>
+                                <td><span class="badge bg-secondary">${row.jenis_izin}</span></td>
+                                <td><span class="badge ${badgeClass}">${iconStatus}</span></td>
+                            </tr>
+                            `;
+                        });
+                    }
+                    
+                    document.getElementById('tabel-live').innerHTML = html;
+                    
+                    // Panggil fungsi filter lagi agar saat data baru masuk, filter kelas tetap berjalan
+                    filterTabel(); 
+                })
+                .catch(err => console.error("Gagal menarik data:", err));
+        }
+
+        // FUNGSI FILTER PENCARIAN KELAS
+        function filterTabel() {
+            let input = document.getElementById("filterKelas").value.toUpperCase();
+            let baris = document.getElementsByClassName("baris-data");
+
+            for (let i = 0; i < baris.length; i++) {
+                let kolomKelas = baris[i].getElementsByClassName("kelas-cell")[0];
+                let kolomNama = baris[i].getElementsByTagName("td")[1]; // Bisa cari nama juga
+                
+                if (kolomKelas || kolomNama) {
+                    let textKelas = kolomKelas.textContent || kolomKelas.innerText;
+                    let textNama = kolomNama.textContent || kolomNama.innerText;
+                    
+                    if (textKelas.toUpperCase().indexOf(input) > -1 || textNama.toUpperCase().indexOf(input) > -1) {
+                        baris[i].style.display = "";
+                    } else {
+                        baris[i].style.display = "none";
+                    }
+                }       
+            }
+        }
+
+        // Eksekusi pertama kali
+        updateTabelPantau();
+
+        // Refresh setiap 3 detik secara diam-diam (tanpa blink)
+        setInterval(updateTabelPantau, 3000);
+    </script>
+</body>
+</html> 

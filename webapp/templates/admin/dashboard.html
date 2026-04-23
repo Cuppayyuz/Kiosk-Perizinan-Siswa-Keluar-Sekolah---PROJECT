@@ -1,314 +1,636 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Admin - Smart Exit</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        body { background-color: #f4f6f9; }
-        .sidebar { min-height: 100vh; background-color: #212529; color: white; }
-        .nav-link { color: #adb5bd; margin-bottom: 5px; }
-        .nav-link:hover, .nav-link.active { color: white; background-color: #0d6efd; border-radius: 5px; }
-        .card-stat { border-left: 4px solid #0d6efd; }
-        .update-row { animation: highlight 1.5s ease-out; }
-        @keyframes highlight { 0% { background-color: #d1e7dd; } 100% { background-color: transparent; } }
+      body {
+        background-color: #f4f6f9;
+      }
+      .sidebar {
+        min-height: 100vh;
+        background-color: #212529;
+        color: white;
+      }
+      .nav-link {
+        color: #adb5bd;
+        margin-bottom: 5px;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: white;
+        background-color: #0d6efd;
+        border-radius: 5px;
+      }
+      .card-stat {
+        border-left: 4px solid #0d6efd;
+      }
+      .update-row {
+        animation: highlight 1.5s ease-out;
+      }
+      @keyframes highlight {
+        0% {
+          background-color: #d1e7dd;
+        }
+        100% {
+          background-color: transparent;
+        }
+      }
     </style>
-</head>
-<body>
-
-<div class="d-flex">
-    <div class="sidebar p-3" style="width: 280px;">
-        <h4 class="text-center border-bottom pb-3 mb-4"><i class="fa-solid fa-school"></i> SMART EXIT</h4>
+  </head>
+  <body>
+    <div class="d-flex">
+      <div class="sidebar p-3" style="width: 280px">
+        <h4 class="text-center border-bottom pb-3 mb-4">
+          <i class="fa-solid fa-school"></i> SMART EXIT
+        </h4>
         <div class="text-center mb-4 text-warning">
-            <small>Halo, {{ nama }} (Admin)</small>
+          <small>Halo, {{ nama }} (Admin)</small>
         </div>
-        
-        <ul class="nav flex-column nav-pills" id="adminTabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="tab-dashboard" data-bs-toggle="pill" href="#content-dashboard" role="tab"><i class="fa-solid fa-chart-line me-2"></i> Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="tab-siswa" data-bs-toggle="pill" href="#content-siswa" role="tab"><i class="fa-solid fa-user-graduate me-2"></i> Kelola Siswa</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="tab-guru" data-bs-toggle="pill" href="#content-guru" role="tab"><i class="fa-solid fa-chalkboard-user me-2"></i> Kelola Guru</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="tab-laporan" data-bs-toggle="pill" href="#content-laporan" role="tab"><i class="fa-solid fa-file-lines me-2"></i> Laporan Izin Live</a>
-            </li>
-        </ul>
-        
-        <div class="mt-auto pt-4 border-top text-center mt-5">
-            <a href="/logout" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a>
-        </div>
-    </div>
 
-    <div class="flex-grow-1 p-4 tab-content" id="adminTabsContent">
-        
-        <div class="tab-pane fade show active" id="content-dashboard" role="tabpanel">
-            <h2>Selamat Datang, Administrator! 👋</h2>
-            <p class="text-muted">Data ini di-update secara otomatis setiap 3 detik.</p>
-            
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card card-stat shadow-sm mb-3">
-                        <div class="card-body">
-                            <h6 class="card-title text-muted">Total Siswa Terdaftar</h6>
-                            <h2 class="mb-0" id="stat-siswa"><i class="fas fa-spinner fa-spin"></i></h2>
-                        </div>
-                    </div>
+        <ul class="nav flex-column nav-pills" id="adminTabs" role="tablist">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              id="tab-dashboard"
+              data-bs-toggle="pill"
+              href="#content-dashboard"
+              role="tab"
+            >
+              <i class="fa-solid fa-chart-line me-2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="tab-siswa"
+              data-bs-toggle="pill"
+              href="#content-siswa"
+              role="tab"
+            >
+              <i class="fa-solid fa-user-graduate me-2"></i> Kelola Siswa
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="tab-guru"
+              data-bs-toggle="pill"
+              href="#content-guru"
+              role="tab"
+            >
+              <i class="fa-solid fa-chalkboard-user me-2"></i> Kelola Guru
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="tab-laporan"
+              data-bs-toggle="pill"
+              href="#content-laporan"
+              role="tab"
+            >
+              <i class="fa-solid fa-file-lines me-2"></i> Laporan Izin Live
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-auto pt-4 border-top text-center mt-5">
+          <a href="/logout" class="btn btn-danger w-100">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+          </a>
+        </div>
+      </div>
+
+      <div class="flex-grow-1 p-4 tab-content" id="adminTabsContent">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div
+          class="alert alert-{{ category }} alert-dismissible fade show shadow-sm"
+          role="alert"
+        >
+          {{ message | safe }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <div
+          class="tab-pane fade show active"
+          id="content-dashboard"
+          role="tabpanel"
+        >
+          <h2>Selamat Datang, Administrator! 👋</h2>
+          <p class="text-muted">
+            Data ini di-update secara otomatis setiap 3 detik.
+          </p>
+
+          <div class="row mt-4">
+            <div class="col-md-4">
+              <div class="card card-stat shadow-sm mb-3">
+                <div class="card-body">
+                  <h6 class="card-title text-muted">Total Siswa Terdaftar</h6>
+                  <h2 class="mb-0" id="stat-siswa">
+                    <i class="fas fa-spinner fa-spin"></i>
+                  </h2>
                 </div>
-                <div class="col-md-4">
-                    <div class="card card-stat shadow-sm mb-3" style="border-left-color: #198754;">
-                        <div class="card-body">
-                            <h6 class="card-title text-muted">Total Guru</h6>
-                            <h2 class="mb-0" id="stat-guru"><i class="fas fa-spinner fa-spin"></i></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card card-stat shadow-sm mb-3" style="border-left-color: #ffc107;">
-                        <div class="card-body">
-                            <h6 class="card-title text-muted">Izin Dibuat Hari Ini</h6>
-                            <h2 class="mb-0" id="stat-izin"><i class="fas fa-spinner fa-spin"></i></h2>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+            <div class="col-md-4">
+              <div
+                class="card card-stat shadow-sm mb-3"
+                style="border-left-color: #198754"
+              >
+                <div class="card-body">
+                  <h6 class="card-title text-muted">Total Guru</h6>
+                  <h2 class="mb-0" id="stat-guru">
+                    <i class="fas fa-spinner fa-spin"></i>
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div
+                class="card card-stat shadow-sm mb-3"
+                style="border-left-color: #ffc107"
+              >
+                <div class="card-body">
+                  <h6 class="card-title text-muted">Izin Dibuat Hari Ini</h6>
+                  <h2 class="mb-0" id="stat-izin">
+                    <i class="fas fa-spinner fa-spin"></i>
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="tab-pane fade" id="content-siswa" role="tabpanel">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Data Siswa</h2>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSiswa"><i class="fa-solid fa-plus"></i> Tambah Siswa</button>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Data Siswa</h2>
+            <div>
+              <button class="btn btn-info text-white me-2" data-bs-toggle="modal" data-bs-target="#modalImportSiswa">
+                  <i class="fa-solid fa-file-import"></i> Import CSV
+              <button
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalTambahSiswa"
+              >
+                <i class="fa-solid fa-plus"></i> Tambah Siswa
+              </button>
             </div>
-            
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>No</th>
-                                <th>rfid_uid</th>
-                                <th>Nama Siswa</th>
-                                <th>Kelas</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for s in data_siswa %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ s.rfid_uid }}</td>
-                                <td>{{ s.nama_siswa }}</td>
-                                <td>{{ s.kelas }}</td>
-                                <td>
-                                    <a href="/admin/hapus_siswa/{{ s.id_siswa }}" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus {{ s.nama_siswa }}?')"><i class="fa-solid fa-trash"></i> Hapus</a>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">Belum ada data siswa.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+          </div>
+
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>No</th>
+                    <th>rfid_uid</th>
+                    <th>Nama Siswa</th>
+                    <th>Kelas</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for s in data_siswa %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ s.rfid_uid }}</td>
+                    <td>{{ s.nama_siswa }}</td>
+                    <td>{{ s.kelas }}</td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-warning me-1"
+                        onclick="bukaModalEdit('{{ s.id_siswa }}', '{{ s.rfid_uid }}', '{{ s.nama_siswa }}', '{{ s.kelas }}')"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                      </button>
+                      <a
+                        href="/admin/hapus_siswa/{{ s.id_siswa }}"
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('Yakin ingin menghapus {{ s.nama_siswa }}?')"
+                      >
+                        <i class="fa-solid fa-trash"></i> Hapus
+                      </a>
+                    </td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                    <td colspan="5" class="text-center text-muted">
+                      Belum ada data siswa.
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
 
         <div class="tab-pane fade" id="content-guru" role="tabpanel">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Data Guru</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahGuru"><i class="fa-solid fa-plus"></i> Tambah Guru</button>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Data Guru</h2>
+            <button
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalTambahGuru"
+            >
+              <i class="fa-solid fa-plus"></i> Tambah Guru
+            </button>
+          </div>
+
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>No</th>
+                    <th>Nama Lengkap</th>
+                    <th>Username (Login)</th>
+                    <th>Role</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for g in data_guru %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ g.nama_lengkap }}</td>
+                    <td>{{ g.username }}</td>
+                    <td>
+                      <span class="badge bg-info text-dark">{{ g.role }}</span>
+                    </td>
+                    <td>
+                      <a
+                        href="/admin/hapus_guru/{{ g.id_guru }}"
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('Yakin hapus guru {{ g.nama_lengkap }}?')"
+                      >
+                        <i class="fa-solid fa-trash"></i> Hapus
+                      </a>
+                    </td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                    <td colspan="5" class="text-center text-muted">
+                      Belum ada data guru.
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
-            
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Lengkap</th>
-                                <th>Username (Login)</th>
-                                <th>Role</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for g in data_guru %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ g.nama_lengkap }}</td>
-                                <td>{{ g.username }}</td>
-                                <td><span class="badge bg-info text-dark">{{ g.role }}</span></td>
-                                <td>
-                                    <a href="/admin/hapus_guru/{{ g.id_guru }}" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus guru {{ g.nama_lengkap }}?')"><i class="fa-solid fa-trash"></i> Hapus</a>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">Belum ada data guru.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+          </div>
         </div>
 
         <div class="tab-pane fade" id="content-laporan" role="tabpanel">
+          <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Riwayat Laporan Izin (Seluruh Sekolah)</h2>
-            <div class="card shadow-sm mt-3">
-                <div class="card-body">
-                    <table class="table table-striped align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Waktu Izin</th>
-                                <th>Kode Token</th>
-                                <th>Jenis Izin</th>
-                                <th>Status Terkini</th>
-                                <th>Guru Piket</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabel-laporan-live">
-                            <tr><td colspan="5" class="text-center py-4"><i class="fas fa-spinner fa-spin"></i> Menghubungkan ke server...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <a href="/admin/export_laporan" class="btn btn-success">
+                <i class="fa-solid fa-file-excel"></i> Export Laporan CSV
+            </a>
+          </div>
+          <div class="card shadow-sm mt-3">
+            <div class="card-body">
+              <table class="table table-striped align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Waktu Izin</th>
+                    <th>Kode Token</th>
+                    <th>Jenis Izin</th>
+                    <th>Status Terkini</th>
+                    <th>Guru Piket</th>
+                  </tr>
+                </thead>
+                <tbody id="tabel-laporan-live">
+                  <tr>
+                    <td colspan="5" class="text-center py-4">
+                      <i class="fas fa-spinner fa-spin"></i> Menghubungkan ke
+                      server...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
-
+      </div>
     </div>
-</div>
 
-<div class="modal fade" id="modalTambahSiswa" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal fade" id="modalTambahSiswa" tabindex="-1">
+      <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/admin/tambah_siswa" method="POST">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Tambah Data Siswa</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">rfid_uid</label>
-                        <input type="text" name="rfid_uid" class="form-control" placeholder="Masukkan 10 digit rfid_uid" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nama Lengkap</label>
-                        <input type="text" name="nama" class="form-control" placeholder="Nama Siswa" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kelas</label>
-                        <input type="text" name="kelas" class="form-control" placeholder="Contoh: XII RPL 1" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan Data Siswa</button>
-                </div>
-            </form>
+          <form action="/admin/tambah_siswa" method="POST">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title">Tambah Data Siswa</h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">rfid_uid</label>
+                <input
+                  type="text"
+                  name="rfid_uid"
+                  class="form-control"
+                  placeholder="Masukkan 10 digit rfid_uid"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nama Lengkap</label>
+                <input
+                  type="text"
+                  name="nama"
+                  class="form-control"
+                  placeholder="Nama Siswa"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Kelas</label>
+                <input
+                  type="text"
+                  name="kelas"
+                  class="form-control"
+                  placeholder="Contoh: XII RPL 1"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Batal
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Simpan Data Siswa
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</div>
 
-<div class="modal fade" id="modalTambahGuru" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal fade" id="modalEditSiswa" tabindex="-1">
+      <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/admin/tambah_guru" method="POST">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">Tambah Akun Guru/Admin</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nama Lengkap</label>
-                        <input type="text" name="nama_lengkap" class="form-control" placeholder="Contoh: Budi Santoso, S.Kom" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Username Login</label>
-                        <input type="text" name="username" class="form-control" placeholder="Untuk login ke web" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Role Akses</label>
-                        <select name="role" class="form-select">
-                            <option value="guru">Guru (Hanya bisa buat izin)</option>
-                            <option value="admin">Admin (Akses penuh Dashboard)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success">Simpan Akun</button>
-                </div>
-            </form>
+          <form action="/admin/edit_siswa" method="POST">
+            <div class="modal-header bg-warning text-dark">
+              <h5 class="modal-title">
+                <i class="fa-solid fa-pen-to-square"></i> Edit Data Siswa
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id_siswa" id="edit_id_siswa" />
+              <div class="mb-3">
+                <label class="form-label">rfid_uid</label>
+                <input
+                  type="text"
+                  name="rfid_uid"
+                  id="edit_rfid_uid"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nama Lengkap</label>
+                <input
+                  type="text"
+                  name="nama"
+                  id="edit_nama"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Kelas</label>
+                <input
+                  type="text"
+                  name="kelas"
+                  id="edit_kelas"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Batal
+              </button>
+              <button type="submit" class="btn btn-warning fw-bold">
+                Update Data
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // ========================================================
-    // SCRIPT REAL-TIME (AJAX FETCH)
-    // ========================================================
+    <div class="modal fade" id="modalTambahGuru" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="/admin/tambah_guru" method="POST">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title">Tambah Akun Guru/Admin</h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Nama Lengkap</label>
+                <input
+                  type="text"
+                  name="nama_lengkap"
+                  class="form-control"
+                  placeholder="Contoh: Budi Santoso, S.Kom"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Username Login</label>
+                <input
+                  type="text"
+                  name="username"
+                  class="form-control"
+                  placeholder="Untuk login ke web"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Role Akses</label>
+                <select name="role" class="form-select">
+                  <option value="guru">Guru (Hanya bisa buat izin)</option>
+                  <option value="admin">Admin (Akses penuh Dashboard)</option>
+                  <option value="pantau">Pemantau (Sekretaris/Guru Mapel)</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Batal
+              </button>
+              <button type="submit" class="btn btn-success">Simpan Akun</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     
-    function updateDashboardStats() {
-        fetch('/api/admin/dashboard_stats')
-            .then(response => response.json())
-            .then(data => {
-                if(document.getElementById('stat-siswa')) {
-                    document.getElementById('stat-siswa').innerText = data.total_siswa || 0;
-                    document.getElementById('stat-guru').innerText = data.total_guru || 0;
-                    document.getElementById('stat-izin').innerText = data.izin_hari_ini || 0;
-                }
-            }).catch(err => console.error("Gagal tarik data stat:", err));
-    }
+    <div class="modal fade" id="modalImportSiswa" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="/admin/import_siswa" method="POST" enctype="multipart/form-data">
+            <div class="modal-header bg-info text-white">
+              <h5 class="modal-title"><i class="fa-solid fa-file-import"></i> Import Data Siswa (.csv)</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="alert alert-warning small">
+                <strong>Format Wajib CSV:</strong><br>
+                Kolom 1: RFID UID (Wajib Angka)<br>
+                Kolom 2: Nama Siswa<br>
+                Kolom 3: Kelas
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Pilih File Data (.csv)</label>
+                <input type="file" name="file_csv" class="form-control" accept=".csv" required />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-info text-white">Mulai Import</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // AJAX untuk Statistik Admin
+      function updateDashboardStats() {
+        fetch("/api/admin/dashboard_stats")
+          .then((response) => response.json())
+          .then((data) => {
+            if (document.getElementById("stat-siswa")) {
+              document.getElementById("stat-siswa").innerText =
+                data.total_siswa || 0;
+              document.getElementById("stat-guru").innerText =
+                data.total_guru || 0;
+              document.getElementById("stat-izin").innerText =
+                data.izin_hari_ini || 0;
+            }
+          })
+          .catch((err) => console.error("Gagal tarik data stat:", err));
+      }
 
-    function updateLaporanLive() {
-        fetch('/api/admin/laporan_live')
-            .then(response => response.json())
-            .then(data => {
-                let html = '';
-                if(data.length === 0) {
-                    html = '<tr><td colspan="5" class="text-center text-muted py-4">Belum ada izin yang dibuat.</td></tr>';
-                } else {
-                    data.forEach(row => {
-                        let badgeClass = row.status === 'WAITING' ? 'bg-warning text-dark' : 'bg-success';
-                        let iconStatus = row.status === 'WAITING' ? '<i class="fas fa-clock"></i>' : '<i class="fas fa-check-circle"></i>';
-                        
-                        html += `
+      // AJAX untuk Laporan Live
+      function updateLaporanLive() {
+        fetch("/api/admin/laporan_live")
+          .then((response) => response.json())
+          .then((data) => {
+            let html = "";
+            if (data.length === 0) {
+              html =
+                '<tr><td colspan="5" class="text-center text-muted py-4">Belum ada izin yang dibuat.</td></tr>';
+            } else {
+              data.forEach((row) => {
+                let badgeClass =
+                  row.status === "WAITING"
+                    ? "bg-warning text-dark"
+                    : "bg-success";
+                let iconStatus =
+                  row.status === "WAITING"
+                    ? '<i class="fas fa-clock"></i>'
+                    : '<i class="fas fa-check-circle"></i>';
+
+                html += `
                         <tr class="update-row">
-                            <td>${row.waktu_dibuat || '-'}</td>
+                            <td>${row.waktu_dibuat || "-"}</td>
                             <td class="fw-bold text-primary font-monospace">${row.kode_token}</td>
                             <td>${row.jenis_izin}</td>
                             <td><span class="badge ${badgeClass}">${iconStatus} ${row.status}</span></td>
-                            <td>${row.nama_guru || 'Sistem'}</td>
+                            <td>${row.nama_guru || "Sistem"}</td>
                         </tr>
                         `;
-                    });
-                }
-                if(document.getElementById('tabel-laporan-live')) {
-                    document.getElementById('tabel-laporan-live').innerHTML = html;
-                }
-            }).catch(err => console.error("Gagal tarik data laporan:", err));
-    }
+              });
+            }
+            if (document.getElementById("tabel-laporan-live")) {
+              document.getElementById("tabel-laporan-live").innerHTML = html;
+            }
+          })
+          .catch((err) => console.error("Gagal tarik data laporan:", err));
+      }
 
-    // Eksekusi fungsi langsung saat halaman dibuka
-    updateDashboardStats();
-    updateLaporanLive();
+      // Eksekusi fungsi saat halaman dimuat
+      updateDashboardStats();
+      updateLaporanLive();
 
-    // Jalankan otomatis setiap 3 detik (3000 ms)
-    setInterval(() => {
+      // Interval 3 Detik
+      setInterval(() => {
         updateDashboardStats();
         updateLaporanLive();
-    }, 3000);
-</script>
-</body>
+      }, 3000);
+
+      // Fungsi untuk Modal Edit Siswa
+      function bukaModalEdit(id, rfid, nama, kelas) {
+        document.getElementById("edit_id_siswa").value = id;
+        document.getElementById("edit_rfid_uid").value = rfid;
+        document.getElementById("edit_nama").value = nama;
+        document.getElementById("edit_kelas").value = kelas;
+
+        var myModal = new bootstrap.Modal(
+          document.getElementById("modalEditSiswa"),
+        );
+        myModal.show();
+      }
+    </script>
+  </body>
 </html>
