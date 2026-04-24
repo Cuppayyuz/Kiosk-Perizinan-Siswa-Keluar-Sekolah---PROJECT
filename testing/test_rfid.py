@@ -1,4 +1,4 @@
-from modules.rfid_handler import RFIDHandler
+from Desktop.modules.rfid_handler import RFIDHandler
 import time
 
 rfid = RFIDHandler()

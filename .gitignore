@@ -1,0 +1,18 @@
+# Python (Mencegah file cache ter-upload)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment Variables & Kredensial (Sangat Penting!)
+.env
+user_session.json
+
+# Media & File Output Kiosk (Agar repository tidak bengkak)
+hasil_foto/
+*.jpg
+*.png
+
+# Executables & Logs
+ngrok.exe
+*.log

@@ -1,166 +1,235 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Guru</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Guru - Smart Exit</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Noto Serif', 'serif'],
+                    },
+                    colors: {
+                        academic: {
+                            bg: '#f8fafc',
+                            surface: '#ffffff',
+                            text: '#334155',
+                            heading: '#0f172a',
+                            primary: '#1e3a8a',
+                            primaryHover: '#1e40af',
+                            border: '#cbd5e1'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
-        .btn-menu { border-radius: 15px; transition: transform 0.2s; }
-        .btn-menu:active { transform: scale(0.95); }
-        .card-history { border-radius: 15px; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        
-        /* Animasi kedip halus saat status berubah */
+        /* Animasi kedip halus saat status berubah di tabel */
         @keyframes highlight {
-            0% { background-color: #d1e7dd; }
+            0% { background-color: #e2e8f0; } /* slate-200 */
             100% { background-color: transparent; }
         }
-        .update-row { animation: highlight 1.5s ease-out; }
+        .update-row {
+            animation: highlight 1.5s ease-out;
+        }
     </style>
 </head>
-<body class="bg-light">
+<body class="bg-academic-bg font-sans text-academic-text antialiased min-h-screen flex flex-col">
 
-    <nav class="navbar navbar-dark bg-primary shadow-sm mb-4">
-        <div class="container">
-            <span class="navbar-brand fw-bold"><i class="fas fa-school me-2"></i>Smart Exit</span>
-            <div class="d-flex align-items-center text-white">
-                <span class="me-3">Halo, {{ nama }}</span>
-                <a href="/logout" class="btn btn-sm btn-danger rounded-pill"><i class="fas fa-power-off"></i></a>
+    <nav class="bg-academic-primary text-white shadow-md border-b-4 border-slate-900">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center font-serif font-bold text-xl tracking-wide">
+                    <i class="fas fa-school mr-3"></i>Smart Exit
+                </div>
+                <div class="flex items-center space-x-4 text-sm font-medium">
+                    <span class="hidden sm:inline-block tracking-wide">Halo, {{ nama }}</span>
+                    <a href="/logout" class="bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded-sm transition-colors flex items-center border border-red-900 shadow-sm" title="Keluar">
+                        <i class="fas fa-power-off"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
+        {% with messages = get_flashed_messages(with_categories=true) %} 
+            {% if messages %} 
+                {% for category, message in messages %} 
+                    {% set style = 'bg-blue-50 border-blue-300 text-blue-800' %} 
+                    {% set icon = 'fa-info-circle' %}
                     
-                    {% set warna = 'info' %}
-                    {% if 'berhasil' in message|lower %}
-                        {% set warna = 'success' %}
-                    {% elif 'gagal dicetak' in message|lower %}
-                        {% set warna = 'warning' %}
-                    {% elif 'kesalahan' in message|lower %}
-                        {% set warna = 'danger' %}
+                    {% if 'berhasil' in message|lower %} 
+                        {% set style = 'bg-emerald-50 border-emerald-300 text-emerald-800' %} 
+                        {% set icon = 'fa-check-circle' %}
+                    {% elif 'gagal dicetak' in message|lower %} 
+                        {% set style = 'bg-amber-50 border-amber-300 text-amber-800' %} 
+                        {% set icon = 'fa-exclamation-triangle' %}
+                    {% elif 'kesalahan' in message|lower %} 
+                        {% set style = 'bg-red-50 border-red-300 text-red-800' %} 
+                        {% set icon = 'fa-times-circle' %}
                     {% endif %}
 
-                    <div class="alert alert-{{ warna }} alert-dismissible fade show shadow-sm" role="alert">
-                        <strong><i class="fas fa-info-circle me-1"></i> Informasi:</strong> {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="{{ style }} border p-4 mb-6 text-sm flex items-start shadow-sm" role="alert">
+                        <i class="fas {{ icon }} mt-0.5 mr-3"></i>
+                        <div class="flex-grow">
+                            <strong>Informasi:</strong> {{ message }}
+                        </div>
+                        <button type="button" class="text-gray-500 hover:text-gray-900 ml-3" onclick="this.parentElement.remove();" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
-                {% endfor %}
-            {% endif %}
+                {% endfor %} 
+            {% endif %} 
         {% endwith %}
-        <div class="text-center mb-4 mt-2">
-            <h5 class="text-secondary fw-bold">Buat Izin Baru</h5>
-            <p class="text-muted small">Klik tombol di bawah untuk generate token</p>
+
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-serif font-bold text-academic-heading tracking-tight">Otorisasi Izin Baru</h2>
+            <div class="w-16 h-1 bg-academic-primary mx-auto my-3"></div>
+            <p class="text-sm text-slate-500 font-medium">Pilih kategori untuk menerbitkan token identifikasi siswa.</p>
         </div>
 
-        <div class="row g-3 justify-content-center mb-5">
-            <div class="col-4 col-md-3">
-                <a href="#" onclick="konfirmasiBuat('SAKIT')" class="btn btn-danger w-100 py-3 btn-menu shadow-sm">
-                    <i class="fas fa-ambulance fa-2x mb-2"></i><br>
-                    <small class="fw-bold">SAKIT</small>
+        <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-12">
+            <button onclick="konfirmasiBuat('SAKIT')" class="group bg-white border border-academic-border p-6 text-center hover:border-red-600 hover:shadow-md transition-all duration-200 cursor-pointer rounded-sm active:scale-95">
+                <i class="fas fa-ambulance text-3xl mb-3 text-red-700 group-hover:scale-110 transition-transform duration-300"></i>
+                <div class="font-bold text-sm tracking-widest text-academic-heading group-hover:text-red-700">SAKIT</div>
+            </button>
+
+            <button onclick="konfirmasiBuat('IZIN')" class="group bg-white border border-academic-border p-6 text-center hover:border-amber-500 hover:shadow-md transition-all duration-200 cursor-pointer rounded-sm active:scale-95">
+                <i class="fas fa-comment-dots text-3xl mb-3 text-amber-600 group-hover:scale-110 transition-transform duration-300"></i>
+                <div class="font-bold text-sm tracking-widest text-academic-heading group-hover:text-amber-600">IZIN</div>
+            </button>
+
+            <button onclick="konfirmasiBuat('DISPEN')" class="group bg-white border border-academic-border p-6 text-center hover:border-academic-primary hover:shadow-md transition-all duration-200 cursor-pointer rounded-sm active:scale-95">
+                <i class="fas fa-users text-3xl mb-3 text-academic-primary group-hover:scale-110 transition-transform duration-300"></i>
+                <div class="font-bold text-sm tracking-widest text-academic-heading group-hover:text-academic-primary">DISPEN</div>
+            </button>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+            <div class="flex justify-between items-end mb-3">
+                <h3 class="font-serif font-bold text-lg text-academic-heading flex items-center">
+                    <i class="fas fa-ticket-alt mr-2 text-academic-primary"></i> 5 Token Terakhir (Pemantauan Langsung)
+                </h3>
+                <a href="/guru/riwayat" class="text-sm text-academic-primary hover:text-academic-primaryHover font-semibold transition-colors flex items-center">
+                    Riwayat Lengkap <i class="fas fa-arrow-right ml-1 text-xs"></i>
                 </a>
             </div>
 
-            <div class="col-4 col-md-3">
-                <a href="#" onclick="konfirmasiBuat('IZIN')" class="btn btn-warning w-100 py-3 btn-menu shadow-sm text-dark">
-                    <i class="fas fa-comment-dots fa-2x mb-2"></i><br>
-                    <small class="fw-bold">IZIN</small>
-                </a>
-            </div>
-
-            <div class="col-4 col-md-3">
-                <a href="#" onclick="konfirmasiBuat('DISPEN')" class="btn btn-primary w-100 py-3 btn-menu shadow-sm">
-                    <i class="fas fa-users fa-2x mb-2"></i><br>
-                    <small class="fw-bold">DISPEN</small>
-                </a>
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="text-secondary ms-1 m-0">🎫 5 Token Terakhir (Live Update)</h6>
-            <a href="/guru/riwayat" class="btn btn-sm btn-outline-primary rounded-pill">
-                Lihat Semua Riwayat <i class="fas fa-arrow-right ms-1"></i>
-            </a>
-        </div>
-        
-        <div class="card card-history bg-white">
-            <div class="card-body p-0">
-                <table class="table table-striped mb-0 align-middle">
-                    <thead class="table-light">
+            <div class="bg-white border border-academic-border shadow-sm rounded-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 border-b border-academic-border text-xs uppercase tracking-wider text-slate-500 font-semibold">
                         <tr>
-                            <th>Token</th>
-                            <th>Jenis</th>
-                            <th>Status</th>
+                            <th class="py-3 px-4">Identitas Token</th>
+                            <th class="py-3 px-4">Kategori</th>
+                            <th class="py-3 px-4">Status & Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="tabel-body">
+                    <tbody id="tabel-body" class="divide-y divide-slate-100 text-sm text-academic-text">
                         <tr>
-                            <td colspan="3" class="text-center py-4 text-muted">
-                                <i class="fas fa-spinner fa-spin me-2"></i> Memuat data...
+                            <td colspan="3" class="text-center py-8 text-slate-400">
+                                <i class="fas fa-circle-notch fa-spin mr-2"></i> Sinkronisasi data...
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <p class="text-center mt-3 text-slate-400 text-xs font-medium">
+                *Indikator status akan diperbarui otomatis saat pemindaian QR Code dilakukan.
+            </p>
         </div>
-        <p class="text-center mt-2 text-muted small">*Status akan berubah otomatis saat siswa scan QR</p>
 
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </main>
 
     <script>
         // 1. FUNGSI KONFIRMASI SEBELUM BUAT TOKEN
         function konfirmasiBuat(jenis) {
-            let tanya = confirm("Apakah Anda yakin ingin membuat token izin " + jenis + "?");
+            let tanya = confirm("Otorisasi sistem: Terbitkan token identifikasi untuk kategori " + jenis + "?");
             if (tanya) {
-                // Jika YES, arahkan ke link Python
                 window.location.href = "/buat_token/" + jenis;
             }
         }
 
-        // 2. FUNGSI UPDATE TABEL OTOMATIS (REAL-TIME)
+        // 2. FUNGSI UPDATE TABEL OTOMATIS (REAL-TIME) - DENGAN STYLING TAILWIND
         function updateTabel() {
-            fetch('/api/riwayat_terbaru') // Panggil API Python
+            fetch("/api/riwayat_terbaru")
                 .then(response => response.json())
                 .then(data => {
-                    let html = '';
-                    
+                    let html = "";
+
                     if (data.length === 0) {
-                        html = '<tr><td colspan="3" class="text-center text-muted py-3">Belum ada token dibuat.</td></tr>';
+                        html = '<tr><td colspan="3" class="text-center text-slate-500 py-6 italic">Belum ada token yang diterbitkan.</td></tr>';
                     } else {
                         data.forEach(row => {
-                            // Tentukan warna badge berdasarkan status
-                            let badgeClass = row.status === 'WAITING' ? 'bg-warning text-dark' : 'bg-success';
-                            let iconStatus = row.status === 'WAITING' ? '<i class="fas fa-clock me-1"></i>' : '<i class="fas fa-check-circle me-1"></i>';
-                            
+                            let badgeStyle = "";
+                            let iconStatus = "";
+                            let tombolAksi = ""; 
+
+                            // Penentuan Styling berdasarkan Status menggunakan Tailwind
+                            if (row.status === "MENUNGGU") {
+                                badgeStyle = "bg-slate-100 text-slate-600 border border-slate-200";
+                                iconStatus = '<i class="fas fa-clock mr-1.5"></i>';
+                            } else if (row.status === "SEDANG_KELUAR") {
+                                badgeStyle = "bg-amber-50 text-amber-700 border border-amber-200";
+                                iconStatus = '<i class="fas fa-running mr-1.5"></i>';
+                                
+                                tombolAksi = `
+                                    <a href="/guru/konfirmasi_kembali/${row.kode_token}" 
+                                       class="inline-block mt-2 sm:mt-0 sm:ml-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-wider py-1 px-2.5 rounded-sm transition-colors border border-emerald-800"
+                                       onclick="return confirm('Tandai siswa ini sudah kembali ke area sekolah?')">
+                                       <i class="fas fa-undo mr-1"></i> Konfirmasi Kembali
+                                    </a>`;
+                            } else if (row.status === "KEMBALI") {
+                                badgeStyle = "bg-emerald-50 text-emerald-700 border border-emerald-200";
+                                iconStatus = '<i class="fas fa-building mr-1.5"></i>';
+                            } else if (row.status === "SELESAI") {
+                                badgeStyle = "bg-blue-50 text-academic-primary border border-blue-200";
+                                iconStatus = '<i class="fas fa-check-double mr-1.5"></i>';
+                            }
+
                             html += `
-                            <tr>
-                                <td class="fw-bold font-monospace text-primary">${row.kode_token}</td>
-                                <td>${row.jenis_izin}</td>
-                                <td><span class="badge ${badgeClass}">${iconStatus} ${row.status}</span></td>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="py-3 px-4 font-mono font-bold text-academic-primary tracking-wide">${row.kode_token}</td>
+                                <td class="py-3 px-4 font-semibold text-slate-700">${row.jenis_izin}</td>
+                                <td class="py-3 px-4 flex flex-col sm:flex-row sm:items-center">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${badgeStyle}">
+                                        ${iconStatus} ${row.status}
+                                    </span>
+                                    ${tombolAksi}
+                                </td>
                             </tr>
                             `;
                         });
                     }
                     
-                    // Masukkan HTML baru ke dalam tabel
-                    document.getElementById('tabel-body').innerHTML = html;
+                    const tbody = document.getElementById("tabel-body");
+                    // Tambahkan animasi flash saat data diperbarui
+                    if(tbody.innerHTML !== html) {
+                        tbody.innerHTML = html;
+                        tbody.classList.remove("update-row");
+                        void tbody.offsetWidth; // trigger reflow
+                        tbody.classList.add("update-row");
+                    }
                 })
-                .catch(error => console.error('Gagal update data:', error));
+                .catch(error => console.error("Gagal sinkronisasi data:", error));
         }
 
-        // Jalankan fungsi updateTabel pertama kali saat web dibuka
         updateTabel();
-
-        // Jalankan fungsi updateTabel SETIAP 2 DETIK (2000 ms)
         setInterval(updateTabel, 2000);
-
     </script>
 </body>
 </html>

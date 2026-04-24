@@ -5,6 +5,8 @@ import sys
 from datetime import date
 import io
 import csv
+import random
+import string
 
 sys.path.append('C:/robotik')
 
@@ -363,23 +365,40 @@ def riwayat_guru():
     # Lempar datanya ke riwayat.html
     return render_template('guru/riwayat.html', nama=session['nama'], riwayat=data_riwayat)
 
-@app.route('/buat_token/<jenis>')
-def buat_token(jenis):  
-
+@app.route('/guru/konfirmasi_kembali/<token>')
+def konfirmasi_kembali(token):
     if 'loggedin' not in session:
         return redirect(url_for('login'))
 
-    # 1. Generate Token Unik
+    conn = get_db_connection()
+    try:
+        cursor = conn.cursor()
+        # Update status menjadi KEMBALI dan catat waktunya
+        query = "UPDATE transaksi_izin SET status = 'KEMBALI', waktu_kembali = NOW() WHERE kode_token = %s"
+        cursor.execute(query, (token,))
+        conn.commit()
+        flash(f"Siswa dengan token {token} telah ditandai kembali secara manual.", "success")
+    except Exception as e:
+        flash(f"Gagal memproses data: {e}", "danger")
+    finally:
+        conn.close()
+
+    return redirect(url_for('dashboard_guru'))
+
+@app.route('/buat_token/<jenis>')
+def buat_token(jenis):  
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
+
     angka_token = random.randint(100000, 999999)
     token_baru = f'{jenis}-{angka_token}'
-
-    # 2. Simpan ke Database
     id_guru = session['id']
     conn = get_db_connection()
     
     try:
         cursor = conn.cursor()
-        query = "INSERT INTO transaksi_izin (kode_token, id_guru, jenis_izin, status) VALUES (%s, %s, %s, 'WAITING')"
+        # [REVISI]: Ganti 'WAITING' menjadi 'MENUNGGU'
+        query = "INSERT INTO transaksi_izin (kode_token, id_guru, jenis_izin, status) VALUES (%s, %s, %s, 'MENUNGGU')"
         cursor.execute(query, (token_baru, id_guru, jenis))
         conn.commit()
     except Exception as e:
@@ -387,22 +406,15 @@ def buat_token(jenis):
         conn.close()
         return redirect(url_for('dashboard_guru'))
         
-    conn.close() # Typo diperbaiki (sebelumnya conn.closer())
+    conn.close()
 
-    # 3. EKSEKUSI PRINTER THERMAL (Pengaman Anti-Crash)
     try:
-        # KODE INI SEKARANG AKTIF!
         printer.cetak_barcode(token_baru, jenis)
-        
-        # Pesan Sukses jika printer aman dan berhasil mencetak
         flash(f"Izin {jenis} berhasil diterbitkan! Struk barcode {token_baru} sedang dicetak.", "success")
-        
     except Exception as e:
-        # Jika printer mati/error, aplikasi web tetap aman!
         print(f"[WARNING PRINTER]: {e}")
         flash(f"Izin {jenis} TERSIMPAN, tapi STRUK GAGAL DICETAK! Periksa sambungan printer thermal.", "warning")
 
-    # 4. Kembali ke dashboard guru
     return redirect(url_for('dashboard_guru'))
 
 @app.route('/api/riwayat_terbaru')
@@ -483,41 +495,44 @@ def export_laporan():
 # =========================================================
 # ROUTE LAYAR PANTAU (UNTUK SEKRETARIS & GURU MAPEL)
 # =========================================================
-@app.route('/pantau_kelas')
-def pantau_kelas():
-    # Keamanan Tinggi: Hanya yang sudah login yang bisa masuk
+# --- ROUTE UNTUK HALAMAN PANTAU PER KELAS ---
+@app.route('/pantau/<kelas>')
+def pantau_per_kelas(kelas):
     if 'loggedin' not in session:
         return redirect(url_for('login'))
-        
-    return render_template('pantau_kelas.html', nama=session['nama'])
+    
+    # Kita kirimkan variabel 'kelas' ke HTML agar judulnya berubah otomatis
+    return render_template('pantau_per_kelas.html', nama=session['nama'], kelas_target=kelas)
 
-@app.route('/api/pantau_live')
-def api_pantau_live():
-    # Keamanan Tinggi: Cegat jika tidak ada session
+# --- API LIVE UNTUK DATA PER KELAS ---
+@app.route('/api/pantau_live/<kelas>')
+def api_pantau_kelas_filtered(kelas):
     if 'loggedin' not in session: 
         return jsonify([])
         
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
-    # Ambil data izin HARI INI saja, urutkan dari yang terbaru
     hari_ini = date.today().strftime('%Y-%m-%d')
+    
+    # Query SQL dengan JOIN ke tabel siswa dan FILTER berdasarkan kelas
     query = """
         SELECT t.waktu_dibuat, t.kode_token, t.jenis_izin, t.status, 
                s.nama_siswa, s.kelas
         FROM transaksi_izin t
-        LEFT JOIN siswa s ON t.rfid_siswa = s.rfid_uid
-        WHERE DATE(t.waktu_dibuat) = %s AND t.status IN ('WAITING', 'KELUAR', 'SUCCESS')
+        INNER JOIN siswa s ON t.rfid_siswa = s.rfid_uid
+        WHERE DATE(t.waktu_dibuat) = %s 
+          AND s.kelas = %s 
+          AND t.status IN ('SEDANG_KELUAR', 'KEMBALI')
         ORDER BY t.waktu_dibuat DESC
     """
-    cursor.execute(query, (hari_ini,))
+    cursor.execute(query, (hari_ini, kelas))
     data = cursor.fetchall()
     conn.close()
     
     return jsonify(data)
 
-import random
-import string
+
 
 # =========================================================
 # API UNTUK APLIKASI ANDROID GURU (KIVYMD) - VERSI LOGIN

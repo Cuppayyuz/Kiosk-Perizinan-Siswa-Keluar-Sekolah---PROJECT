@@ -1,5 +1,5 @@
 import cv2
-from modules.camera import CameraHandler
+from Desktop.modules.camera import CameraHandler
 
 def jalankan_tes():
     print("Mulai inisialisasi Kamera...")

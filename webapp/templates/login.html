@@ -5,43 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Guru - Smart Exit</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Noto Serif', 'serif'],
+                    },
+                    colors: {
+                        academic: {
+                            bg: '#f8fafc', // slate-50 (sangat lembut, tidak mencolok)
+                            surface: '#ffffff',
+                            text: '#334155', // slate-700
+                            heading: '#0f172a', // slate-900
+                            primary: '#1e3a8a', // blue-900 (navy klasik)
+                            primaryHover: '#1e40af',
+                            border: '#cbd5e1'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gradient-to-br from-blue-500 to-indigo-700 min-h-screen flex items-center justify-center font-sans">
+<body class="bg-academic-bg min-h-screen flex items-center justify-center font-sans text-academic-text antialiased">
 
-    <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl hover:scale-[1.01] transition-transform duration-300">
+    <div class="w-full max-w-md bg-academic-surface p-8 sm:p-10 border border-academic-border/60 shadow-sm rounded-sm">
+        
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Login</h1>
-            <p class="text-md font-bold text-gray-500">untuk masuk ke dashboard</p>
+            <div class="w-12 h-1 bg-academic-primary mx-auto mb-6"></div>
+            
+            <h1 class="text-3xl font-serif font-bold text-academic-heading tracking-tight mb-2">Smart Exit</h1>
+            <p class="text-sm text-slate-500 font-medium tracking-wide">Sistem Manajemen Izin Terpadu</p>
         </div>
 
         {% if msg %}
-        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-sm" role="alert">
-            <p class="font-bold">Gagal Masuk</p>
+        <div class="bg-red-50 border-l-2 border-red-600 text-red-700 p-4 mb-6 text-sm" role="alert">
+            <p class="font-semibold mb-1">Otorisasi Gagal</p>
             <p>{{ msg }}</p>
         </div>
         {% endif %}
 
         <form action="/" method="POST" class="space-y-6">
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2 ml-1">Username</label>
-                <input type="text" name="username" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" placeholder="Masukkan username..." required>
+                <label for="username" class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-2">Identitas Guru</label>
+                <input type="text" name="username" id="username" class="w-full px-4 py-2.5 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary focus:ring-1 focus:ring-academic-primary transition-all duration-200 text-sm" placeholder="Masukkan ID / Username" required>
             </div>
 
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2 ml-1">Password</label>
-                <input type="password" name="password" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" placeholder="Masukkan password..." required>
+                <label for="password" class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-2">Kata Sandi</label>
+                <div class="relative">
+                    <input type="password" name="password" id="password" class="w-full px-4 py-2.5 pr-10 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary focus:ring-1 focus:ring-academic-primary transition-all duration-200 text-sm" placeholder="Masukkan kata sandi" required>
+                    
+                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-academic-primary focus:outline-none transition-colors" aria-label="Tampilkan password">
+                        <svg id="eye-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        <svg id="eye-closed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.5-2.8m2.5-2.5A10.05 10.05 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.05 10.05 0 01-1.5 2.8m-2.5 2.5A3 3 0 0112 15m0-6a3 3 0 013 3m-3-3l-6 6m0 0l-6 6m6-6L3 3m18 18l-6-6"></path></svg>
+                    </button>
+                </div>
             </div>
 
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95">
-                MASUK SEKARANG
+            <button type="submit" class="w-full bg-academic-primary hover:bg-academic-primaryHover text-white py-3 rounded-sm transition-colors text-sm font-semibold tracking-wide mt-2 shadow-sm">
+                Masuk ke Dasbor
             </button>
         </form>
         
-        <div class="mt-6 text-center text-sm text-gray-300">
-            &copy; 2026 Smart Exit System
+        <div class="mt-8 text-center pt-6">
+            <p class="text-xs text-slate-400 font-sans">&copy; 2026 Smart Exit System.</p>
         </div>
     </div>
 
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeOpen = document.getElementById('eye-open');
+            const eyeClosed = document.getElementById('eye-closed');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeOpen.classList.add('hidden');
+                eyeClosed.classList.remove('hidden');
+            } else {
+                passwordInput.type = 'password';
+                eyeOpen.classList.remove('hidden');
+                eyeClosed.classList.add('hidden');
+            }
+        }
+    </script>
 </body>
 </html>

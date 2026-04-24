@@ -79,7 +79,7 @@ class CameraHandler:
             print(f"[OK] Foto berhasil dijepret & disimpan di: {filepath}")
             return filepath
         return None
-
+    
     def close_camera(self):
         """ Menutup webcam """
         if self.cap:

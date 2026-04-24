@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart Exit</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-blue-400 flex items-center justify-center min-h-screen font-sans text-gray-800">
+
+    <div class="w-full max-w-md px-6">
+        <div class="bg-white shadow-xl rounded-3xl p-8 sm:p-10">
+
+            <div class="text-center mb-8">
+                <i class=" text-5xl text-blue-600 mb-4"></i>
+                <h3 class="text-3xl font-extrabold text-gray-900">SMART EXIT</h3>
+                <p class="text-gray-500 mt-2">Silakan masukkan email dan password Anda</p>
+            </div>
+
+            @if(session('sukses'))
+            <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-r-lg flex items-center mb-6">
+                <i class=" mr-3 text-xl"></i>
+                <span class="font-medium">{{ session('sukses') }}</span>
+            </div>
+            @endif
+
+            @if(session('errors'))
+            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4  flex items-center mb-6 shadow-sm">
+                <i class="fas fa-exclamation-circle mr-3 text-xl"></i>
+
+                <span class="font-medium">{{ $errors->first() }}</span>
+            </div>
+            @endif
+
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-bold mb-2">Email</label>
+                    <input type="email" name="email"
+                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+                        placeholder="Masukkan Email" value="{{ old('email') }}" required autofocus>
+                </div>
+
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-gray-700 font-bold">Password</label>
+                        @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                            Lupa password?
+                        </a>
+                        @endif
+                    </div>
+                    <div class="relative">
+                        <input type="password" name="password" class="w-full px-5 py-4 border border-gray-300 rounded-xl bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12" placeholder="Masukkan Password" required>
+
+                        <button type="button" onclick="togglePassword(this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-600 transition-colors focus:outline-none">
+                            <i class="fas fa-eye text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg py-3 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+                    LOGIN
+                </button>
+            </form>
+
+            <div class="text-center mt-8">
+                <p class="text-gray-500 font-medium">Belum punya akun siswa?
+                    <a href="{{ route('register') }}" class="text-blue-600 font-bold hover:underline transition-colors">Daftar di sini</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function togglePassword(btn) {
+            // Mencari kotak input yang letaknya persis di sebelah/sebelum tombol ikon mata
+            let input = btn.previousElementSibling;
+            let icon = btn.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text"; // Tampilkan teks
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash"); // Ganti ikon mata dicoret
+            } else {
+                input.type = "password"; // Sembunyikan teks
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye"); // Ganti ikon mata terbuka
+            }
+        }
+    </script>
+</body>
+
+</html>
