@@ -2,6 +2,7 @@ library python yang digunakan untuk membangun aplikasi web:
 
 flask
 mysql-connector-python
+APScheduler
 
 ///read.me 
 langkah-langkah pembuatan tampilan aplikasi web untuk admin dan guru :

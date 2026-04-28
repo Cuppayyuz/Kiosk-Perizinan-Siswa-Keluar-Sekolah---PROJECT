@@ -1,478 +1,1334 @@
 <!doctype html>
 <html lang="id">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Admin - Smart Exit</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
-                    },
-                    colors: {
-                        academic: {
-                            bg: '#f8fafc',
-                            surface: '#ffffff',
-                            text: '#334155',
-                            heading: '#0f172a',
-                            primary: '#1e3a8a',
-                            primaryHover: '#1e40af',
-                            border: '#cbd5e1'
-                        }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Noto Serif", "serif"],
+            },
+            colors: {
+              academic: {
+                bg: "#f8fafc",
+                surface: "#ffffff",
+                text: "#334155",
+                heading: "#0f172a",
+                primary: "#1e3a8a",
+                primaryHover: "#1e40af",
+                border: "#cbd5e1",
+              },
+            },
+          },
+        },
+      };
     </script>
     <style>
-        /* Animasi Live Update */
-        @keyframes highlight {
-            0% { background-color: #e2e8f0; }
-            100% { background-color: transparent; }
+      @keyframes highlight {
+        0% {
+          background-color: #e2e8f0;
         }
-        .update-row { animation: highlight 1.5s ease-out; }
+        100% {
+          background-color: transparent;
+        }
+      }
+      .update-row {
+        animation: highlight 1.5s ease-out;
+      }
     </style>
-</head>
-<body class="bg-academic-bg font-sans text-academic-text antialiased">
-
+  </head>
+  <body class="bg-academic-bg font-sans text-academic-text antialiased">
     <div class="flex flex-col md:flex-row min-h-screen">
-        
-        <aside class="w-full md:w-72 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20">
-            <div class="p-6 border-b border-slate-700/50 text-center">
-                <h4 class="font-serif font-bold text-xl text-white tracking-wider">
-                    <i class="fa-solid fa-school mr-2 text-amber-500"></i> SMART EXIT
-                </h4>
-                <p class="mt-2 text-xs font-medium text-amber-400/80 tracking-widest uppercase">Portal Administrator</p>
+      <aside
+        class="w-full md:w-72 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20"
+      >
+        <div class="p-6 border-b border-slate-700/50 text-center">
+          <h4 class="font-serif font-bold text-xl text-white tracking-wider">
+            <i class="fa-solid fa-school mr-2 text-amber-500"></i> SMART EXIT
+          </h4>
+          <p
+            class="mt-2 text-xs font-medium text-amber-400/80 tracking-widest uppercase"
+          >
+            Portal Administrator
+          </p>
+        </div>
+
+        <div class="px-6 py-4 border-b border-slate-700/50 bg-slate-800/30">
+          <p class="text-sm">Selamat bertugas,</p>
+          <p class="font-bold text-white">{{ nama }}</p>
+        </div>
+
+        <nav class="flex-grow p-4 space-y-1">
+          <button
+            onclick="switchTab('dashboard')"
+            id="tab-dashboard"
+            class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium rounded-sm transition-colors bg-slate-800 text-white border-l-4 border-amber-500"
+          >
+            <i class="fa-solid fa-chart-line w-6"></i> Dasbor Utama
+          </button>
+          <button
+            onclick="switchTab('siswa')"
+            id="tab-siswa"
+            class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-sm transition-colors border-l-4 border-transparent"
+          >
+            <i class="fa-solid fa-user-graduate w-6"></i> Kelola Data Siswa
+          </button>
+          <button
+            onclick="switchTab('guru')"
+            id="tab-guru"
+            class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-sm transition-colors border-l-4 border-transparent"
+          >
+            <i class="fa-solid fa-chalkboard-user w-6"></i> Kelola Akun Guru
+          </button>
+          <button
+            onclick="switchTab('laporan')"
+            id="tab-laporan"
+            class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-sm transition-colors border-l-4 border-transparent"
+          >
+            <i class="fa-solid fa-file-lines w-6"></i> Laporan Izin Live
+          </button>
+          <button
+            onclick="switchTab('monitor')"
+            id="tab-monitor"
+            class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-sm transition-colors border-l-4 border-transparent"
+          >
+            <i class="fa-solid fa-tv w-6"></i> Monitor Per Kelas
+          </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-700/50">
+          <a
+            href="/logout"
+            class="flex items-center justify-center w-full px-4 py-2 bg-red-900/50 hover:bg-red-800 text-red-200 hover:text-white border border-red-800 rounded-sm transition-colors text-sm font-semibold"
+          >
+            <i class="fa-solid fa-right-from-bracket mr-2"></i> Keluar Sistem
+          </a>
+        </div>
+      </aside>
+
+      <main class="flex-grow p-6 md:p-10 w-full overflow-x-hidden">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %} {% set alert_bg =
+        'bg-blue-50 border-blue-300 text-blue-800' %} {% if category ==
+        'success' %}{% set alert_bg = 'bg-emerald-50 border-emerald-300
+        text-emerald-800' %}{% endif %} {% if category == 'danger' or category
+        == 'error' %}{% set alert_bg = 'bg-red-50 border-red-300 text-red-800'
+        %}{% endif %} {% if category == 'warning' %}{% set alert_bg =
+        'bg-amber-50 border-amber-300 text-amber-800' %}{% endif %}
+
+        <div
+          class="{{ alert_bg }} border p-4 mb-6 text-sm flex items-start shadow-sm rounded-sm alert-box"
+        >
+          <div class="flex-grow">{{ message | safe }}</div>
+          <button
+            type="button"
+            class="text-slate-500 hover:text-slate-900 ml-3"
+            onclick="this.closest('.alert-box').remove()"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <div id="content-dashboard" class="tab-content block">
+          <div class="mb-8 border-b border-academic-border pb-4">
+            <h2
+              class="text-3xl font-serif font-bold text-academic-heading tracking-tight"
+            >
+              Tinjauan Sistem
+            </h2>
+            <p class="text-sm text-slate-500 mt-1">
+              Status dan metrik pendataan diperbarui otomatis setiap 3 detik.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div
+              class="bg-white border-l-4 border-academic-primary border-y border-r border-academic-border p-6 shadow-sm"
+            >
+              <h6
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+              >
+                Total Siswa Terdaftar
+              </h6>
+              <h2
+                class="text-4xl font-serif font-bold text-academic-heading"
+                id="stat-siswa"
+              >
+                <i
+                  class="fas fa-circle-notch fa-spin text-lg text-slate-300"
+                ></i>
+              </h2>
             </div>
-            
-            <div class="px-6 py-4 border-b border-slate-700/50 bg-slate-800/30">
-                <p class="text-sm">Selamat bertugas,</p>
-                <p class="font-bold text-white">{{ nama }}</p>
+            <div
+              class="bg-white border-l-4 border-emerald-600 border-y border-r border-academic-border p-6 shadow-sm"
+            >
+              <h6
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+              >
+                Total Guru & Staf
+              </h6>
+              <h2
+                class="text-4xl font-serif font-bold text-academic-heading"
+                id="stat-guru"
+              >
+                <i
+                  class="fas fa-circle-notch fa-spin text-lg text-slate-300"
+                ></i>
+              </h2>
+            </div>
+            <div
+              class="bg-white border-l-4 border-amber-500 border-y border-r border-academic-border p-6 shadow-sm"
+            >
+              <h6
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+              >
+                Izin Diterbitkan Hari Ini
+              </h6>
+              <h2
+                class="text-4xl font-serif font-bold text-academic-heading"
+                id="stat-izin"
+              >
+                <i
+                  class="fas fa-circle-notch fa-spin text-lg text-slate-300"
+                ></i>
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        <div id="content-siswa" class="tab-content hidden">
+          <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-academic-border pb-4 gap-4"
+          >
+            <div>
+              <h2 class="text-2xl font-serif font-bold text-academic-heading">
+                Pangkalan Data Siswa
+              </h2>
+              <p class="text-sm text-slate-500">
+                Manajemen identitas dan kartu RFID siswa berstruktur per kelas.
+              </p>
+            </div>
+            <div class="flex space-x-3">
+              <button
+                onclick="openModal('modalImportSiswa')"
+                class="px-4 py-2 bg-white border border-academic-border text-slate-700 hover:bg-slate-50 text-sm font-semibold shadow-sm transition-colors"
+              >
+                <i class="fa-solid fa-file-import mr-2"></i> Import CSV
+              </button>
+              <button
+                onclick="openModal('modalTambahSiswa')"
+                class="px-4 py-2 bg-academic-primary hover:bg-academic-primaryHover text-white text-sm font-semibold shadow-sm transition-colors"
+              >
+                <i class="fa-solid fa-plus mr-2"></i> Register Siswa
+              </button>
+            </div>
+          </div>
+
+          {% set daftar_kelas_siswa = [] %} {% for s in data_siswa %} {% if
+          s.kelas not in daftar_kelas_siswa %} {% set _ =
+          daftar_kelas_siswa.append(s.kelas) %} {% endif %} {% endfor %}
+
+          <div id="view-grid-siswa">
+            <h3 class="text-lg font-bold text-slate-700 mb-4">
+              <i class="fa-solid fa-layer-group text-academic-primary mr-2"></i>
+              Pilih Direktori Kelas
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {% for k in daftar_kelas_siswa|sort %}
+              <div
+                onclick="bukaTabelKelas('{{ k }}')"
+                class="bg-white border-2 border-slate-200 hover:border-academic-primary p-4 rounded-lg cursor-pointer text-center shadow-sm hover:shadow-md transition-all group"
+              >
+                <i
+                  class="fa-solid fa-folder-open text-3xl text-slate-300 group-hover:text-amber-500 mb-2 transition-colors"
+                ></i>
+                <h4 class="font-bold text-academic-heading">{{ k }}</h4>
+              </div>
+              {% else %}
+              <div
+                class="col-span-full text-center py-8 text-slate-400 italic bg-white border rounded"
+              >
+                Belum ada data siswa untuk dipetakan.
+              </div>
+              {% endfor %} {% if 'ALUMNI' in daftar_kelas_siswa %}
+              <div
+                onclick="bukaTabelKelas('ALUMNI')"
+                class="bg-slate-100 border-2 border-slate-300 hover:border-slate-500 p-4 rounded-lg cursor-pointer text-center shadow-sm transition-all group"
+              >
+                <i
+                  class="fa-solid fa-graduation-cap text-3xl text-slate-400 group-hover:text-slate-700 mb-2 transition-colors"
+                ></i>
+                <h4 class="font-bold text-slate-700">ALUMNI</h4>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div id="view-tabel-siswa" class="hidden">
+            <div
+              class="flex justify-between items-center bg-slate-100 p-3 rounded-t-lg border-x border-t border-academic-border mb-0"
+            >
+              <button
+                onclick="tutupTabelKelas()"
+                class="text-sm font-semibold text-slate-600 hover:text-academic-primary"
+              >
+                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Folder
+                Kelas
+              </button>
+              <h3 class="text-lg font-bold text-academic-primary m-0">
+                Kelas: <span id="label-kelas-aktif"></span>
+              </h3>
+
+              <button
+                onclick="bukaModalPromosi()"
+                class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded shadow-sm"
+              >
+                <i class="fa-solid fa-angles-up mr-1"></i> Promosi/Naik Kelas
+              </button>
             </div>
 
-            <nav class="flex-grow p-4 space-y-1">
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium rounded-sm transition-colors bg-slate-800 text-white border-l-4 border-amber-500">
-                    <i class="fa-solid fa-chart-line w-6"></i> Dasbor Utama
-                </button>
-                <button onclick="switchTab('siswa')" id="tab-siswa" class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-sm transition-colors border-l-4 border-transparent">
-                    <i class="fa-solid fa-user-graduate w-6"></i> Kelola Data Siswa
-                </button>
-                <button onclick="switchTab('guru')" id="tab-guru" class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-sm transition-colors border-l-4 border-transparent">
-                    <i class="fa-solid fa-chalkboard-user w-6"></i> Kelola Akun Guru
-                </button>
-                <button onclick="switchTab('laporan')" id="tab-laporan" class="tab-link w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-sm transition-colors border-l-4 border-transparent">
-                    <i class="fa-solid fa-file-lines w-6"></i> Laporan Izin Live
-                </button>
-            </nav>
-
-            <div class="p-4 border-t border-slate-700/50">
-                <a href="/logout" class="flex items-center justify-center w-full px-4 py-2 bg-red-900/50 hover:bg-red-800 text-red-200 hover:text-white border border-red-800 rounded-sm transition-colors text-sm font-semibold">
-                    <i class="fa-solid fa-right-from-bracket mr-2"></i> Keluar Sistem
-                </a>
-            </div>
-        </aside>
-
-        <main class="flex-grow p-6 md:p-10 w-full overflow-x-hidden">
-            
-            {% with messages = get_flashed_messages(with_categories=true) %} 
-                {% if messages %} 
-                    {% for category, message in messages %}
-                        {% set alert_bg = 'bg-blue-50 border-blue-300 text-blue-800' %}
-                        {% if category == 'success' %}{% set alert_bg = 'bg-emerald-50 border-emerald-300 text-emerald-800' %}{% endif %}
-                        {% if category == 'danger' or category == 'error' %}{% set alert_bg = 'bg-red-50 border-red-300 text-red-800' %}{% endif %}
-                        {% if category == 'warning' %}{% set alert_bg = 'bg-amber-50 border-amber-300 text-amber-800' %}{% endif %}
-                        
-                        <div class="{{ alert_bg }} border p-4 mb-6 text-sm flex items-start shadow-sm rounded-sm alert-box">
-                            <div class="flex-grow">{{ message | safe }}</div>
-                            <button type="button" class="text-slate-500 hover:text-slate-900 ml-3" onclick="this.closest('.alert-box').remove()"><i class="fas fa-times"></i></button>
-                        </div>
-                    {% endfor %} 
-                {% endif %} 
-            {% endwith %}
-
-            <div id="content-dashboard" class="tab-content block">
-                <div class="mb-8 border-b border-academic-border pb-4">
-                    <h2 class="text-3xl font-serif font-bold text-academic-heading tracking-tight">Tinjauan Sistem</h2>
-                    <p class="text-sm text-slate-500 mt-1">Status dan metrik pendataan diperbarui otomatis setiap 3 detik.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white border-l-4 border-academic-primary border-y border-r border-academic-border p-6 shadow-sm">
-                        <h6 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Siswa Terdaftar</h6>
-                        <h2 class="text-4xl font-serif font-bold text-academic-heading" id="stat-siswa"><i class="fas fa-circle-notch fa-spin text-lg text-slate-300"></i></h2>
-                    </div>
-                    <div class="bg-white border-l-4 border-emerald-600 border-y border-r border-academic-border p-6 shadow-sm">
-                        <h6 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Guru & Staf</h6>
-                        <h2 class="text-4xl font-serif font-bold text-academic-heading" id="stat-guru"><i class="fas fa-circle-notch fa-spin text-lg text-slate-300"></i></h2>
-                    </div>
-                    <div class="bg-white border-l-4 border-amber-500 border-y border-r border-academic-border p-6 shadow-sm">
-                        <h6 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Izin Diterbitkan Hari Ini</h6>
-                        <h2 class="text-4xl font-serif font-bold text-academic-heading" id="stat-izin"><i class="fas fa-circle-notch fa-spin text-lg text-slate-300"></i></h2>
-                    </div>
-                </div>
-            </div>
-
-            <div id="content-siswa" class="tab-content hidden">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-academic-border pb-4 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-serif font-bold text-academic-heading">Pangkalan Data Siswa</h2>
-                        <p class="text-sm text-slate-500">Manajemen identitas dan kartu RFID siswa.</p>
-                    </div>
-                    <div class="flex space-x-3">
-                        <button onclick="openModal('modalImportSiswa')" class="px-4 py-2 bg-white border border-academic-border text-slate-700 hover:bg-slate-50 text-sm font-semibold shadow-sm transition-colors">
-                            <i class="fa-solid fa-file-import mr-2"></i> Import CSV
+            <div
+              class="bg-white border border-academic-border shadow-sm overflow-hidden rounded-b-lg"
+            >
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[800px]">
+                  <thead
+                    class="bg-slate-50 border-b border-academic-border text-xs uppercase tracking-wider text-slate-500 font-semibold"
+                  >
+                    <tr>
+                      <th class="py-3 px-4 w-16 text-center">No</th>
+                      <th class="py-3 px-4">UID RFID</th>
+                      <th class="py-3 px-4">Nama Lengkap Siswa</th>
+                      <th class="py-3 px-4">Kelas</th>
+                      <th class="py-3 px-4 text-center">Tindakan</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-sm">
+                    {% for s in data_siswa %}
+                    <tr
+                      class="hover:bg-slate-50 baris-siswa"
+                      data-kelas="{{ s.kelas }}"
+                    >
+                      <td
+                        class="py-3 px-4 text-center text-slate-400 font-medium no-urut"
+                      ></td>
+                      <td class="py-3 px-4 font-mono font-bold text-slate-600">
+                        {{ s.rfid_uid }}
+                      </td>
+                      <td class="py-3 px-4 font-semibold text-academic-heading">
+                        {{ s.nama_siswa }}
+                      </td>
+                      <td class="py-3 px-4">{{ s.kelas }}</td>
+                      <td class="py-3 px-4 text-center space-x-2">
+                        <button
+                          onclick="bukaModalEdit('{{ s.id_siswa }}', '{{ s.rfid_uid }}', '{{ s.nama_siswa }}', '{{ s.kelas }}')"
+                          class="inline-flex items-center px-2.5 py-1.5 bg-amber-100 text-amber-700 hover:bg-amber-200 border border-amber-200 rounded-sm text-xs font-semibold transition-colors"
+                        >
+                          <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
                         </button>
-                        <button onclick="openModal('modalTambahSiswa')" class="px-4 py-2 bg-academic-primary hover:bg-academic-primaryHover text-white text-sm font-semibold shadow-sm transition-colors">
-                            <i class="fa-solid fa-plus mr-2"></i> Register Siswa
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-academic-border shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[800px]">
-                            <thead class="bg-slate-50 border-b border-academic-border text-xs uppercase tracking-wider text-slate-500 font-semibold">
-                                <tr>
-                                    <th class="py-3 px-4 w-16 text-center">No</th>
-                                    <th class="py-3 px-4">UID RFID</th>
-                                    <th class="py-3 px-4">Nama Lengkap Siswa</th>
-                                    <th class="py-3 px-4">Kelas</th>
-                                    <th class="py-3 px-4 text-center">Tindakan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 text-sm">
-                                {% for s in data_siswa %}
-                                <tr class="hover:bg-slate-50">
-                                    <td class="py-3 px-4 text-center text-slate-400 font-medium">{{ loop.index }}</td>
-                                    <td class="py-3 px-4 font-mono font-bold text-slate-600">{{ s.rfid_uid }}</td>
-                                    <td class="py-3 px-4 font-semibold text-academic-heading">{{ s.nama_siswa }}</td>
-                                    <td class="py-3 px-4">{{ s.kelas }}</td>
-                                    <td class="py-3 px-4 text-center space-x-2">
-                                        <button onclick="bukaModalEdit('{{ s.id_siswa }}', '{{ s.rfid_uid }}', '{{ s.nama_siswa }}', '{{ s.kelas }}')" class="inline-flex items-center px-2.5 py-1.5 bg-amber-100 text-amber-700 hover:bg-amber-200 border border-amber-200 rounded-sm text-xs font-semibold transition-colors">
-                                            <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
-                                        </button>
-                                        <a href="/admin/hapus_siswa/{{ s.id_siswa }}" onclick="return confirm('Hapus permanen data {{ s.nama_siswa }}?')" class="inline-flex items-center px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 rounded-sm text-xs font-semibold transition-colors">
-                                            <i class="fa-solid fa-trash mr-1"></i> Hapus
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% else %}
-                                <tr><td colspan="5" class="text-center py-8 text-slate-400 italic">Pangkalan data siswa kosong.</td></tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                        <a
+                          href="/admin/hapus_siswa/{{ s.id_siswa }}"
+                          onclick="return confirm('Hapus permanen data {{ s.nama_siswa }}?')"
+                          class="inline-flex items-center px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 rounded-sm text-xs font-semibold transition-colors"
+                        >
+                          <i class="fa-solid fa-trash mr-1"></i> Hapus
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <div id="content-guru" class="tab-content hidden">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-academic-border pb-4 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-serif font-bold text-academic-heading">Otoritas Guru & Staf</h2>
-                        <p class="text-sm text-slate-500">Manajemen akun akses portal sistem.</p>
-                    </div>
-                    <button onclick="openModal('modalTambahGuru')" class="px-4 py-2 bg-academic-primary hover:bg-academic-primaryHover text-white text-sm font-semibold shadow-sm transition-colors">
-                        <i class="fa-solid fa-plus mr-2"></i> Tambah Akun Baru
-                    </button>
-                </div>
-
-                <div class="bg-white border border-academic-border shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[800px]">
-                            <thead class="bg-slate-50 border-b border-academic-border text-xs uppercase tracking-wider text-slate-500 font-semibold">
-                                <tr>
-                                    <th class="py-3 px-4 w-16 text-center">No</th>
-                                    <th class="py-3 px-4">Nama Pendidik / Staf</th>
-                                    <th class="py-3 px-4">Kredensial (Username)</th>
-                                    <th class="py-3 px-4">Tingkat Akses</th>
-                                    <th class="py-3 px-4 text-center">Tindakan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 text-sm">
-                                {% for g in data_guru %}
-                                <tr class="hover:bg-slate-50">
-                                    <td class="py-3 px-4 text-center text-slate-400 font-medium">{{ loop.index }}</td>
-                                    <td class="py-3 px-4 font-semibold text-academic-heading">{{ g.nama_lengkap }}</td>
-                                    <td class="py-3 px-4 font-mono">{{ g.username }}</td>
-                                    <td class="py-3 px-4">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wide">
-                                            {{ g.role }}
-                                        </span>
-                                    </td>
-                                    <td class="py-3 px-4 text-center">
-                                        <a href="/admin/hapus_guru/{{ g.id_guru }}" onclick="return confirm('Cabut akses akun {{ g.nama_lengkap }}?')" class="inline-flex items-center px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 rounded-sm text-xs font-semibold transition-colors">
-                                            <i class="fa-solid fa-trash mr-1"></i> Cabut Akses
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% else %}
-                                <tr><td colspan="5" class="text-center py-8 text-slate-400 italic">Belum ada akun guru yang terdaftar.</td></tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div id="content-guru" class="tab-content hidden">
+          <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-academic-border pb-4 gap-4"
+          >
+            <div>
+              <h2 class="text-2xl font-serif font-bold text-academic-heading">
+                Otoritas Guru & Staf
+              </h2>
+              <p class="text-sm text-slate-500">
+                Manajemen akun akses portal sistem terpusat.
+              </p>
             </div>
+            <button
+              onclick="openModal('modalTambahGuru')"
+              class="px-4 py-2 bg-academic-primary hover:bg-academic-primaryHover text-white text-sm font-semibold shadow-sm transition-colors"
+            >
+              <i class="fa-solid fa-plus mr-2"></i> Tambah Akun Baru
+            </button>
+          </div>
 
-            <div id="content-laporan" class="tab-content hidden">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-academic-border pb-4 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-serif font-bold text-academic-heading">Log Aktivitas Izin</h2>
-                        <p class="text-sm text-slate-500">Pemantauan *real-time* seluruh pergerakan siswa.</p>
-                    </div>
-                    <a href="/admin/export_laporan" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm transition-colors flex items-center">
-                        <i class="fa-solid fa-file-excel mr-2"></i> Unduh Laporan (CSV)
-                    </a>
-                </div>
+          <div class="flex space-x-2 mb-4">
+            <button
+              onclick="filterAkun('semua', this)"
+              class="btn-filter-akun px-4 py-1.5 rounded-full text-xs font-bold bg-academic-primary text-white shadow-sm transition-colors"
+            >
+              Semua Akun
+            </button>
+            <button
+              onclick="filterAkun('admin', this)"
+              class="btn-filter-akun px-4 py-1.5 rounded-full text-xs font-bold bg-slate-200 text-slate-600 hover:bg-slate-300 transition-colors"
+            >
+              Admin
+            </button>
+            <button
+              onclick="filterAkun('guru', this)"
+              class="btn-filter-akun px-4 py-1.5 rounded-full text-xs font-bold bg-slate-200 text-slate-600 hover:bg-slate-300 transition-colors"
+            >
+              Guru/Instruktur
+            </button>
+            <button
+              onclick="filterAkun('pantau', this)"
+              class="btn-filter-akun px-4 py-1.5 rounded-full text-xs font-bold bg-slate-200 text-slate-600 hover:bg-slate-300 transition-colors"
+            >
+              Pemantau Kelas
+            </button>
+          </div>
 
-                <div class="bg-white border border-academic-border shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[800px]">
-                            <thead class="bg-slate-50 border-b border-academic-border text-xs uppercase tracking-wider text-slate-500 font-semibold">
-                                <tr>
-                                    <th class="py-3 px-4">Waktu Penerbitan</th>
-                                    <th class="py-3 px-4">Kode Token</th>
-                                    <th class="py-3 px-4">Kategori Izin</th>
-                                    <th class="py-3 px-4">Status Terkini</th>
-                                    <th class="py-3 px-4">Otorisator (Guru)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabel-laporan-live" class="divide-y divide-slate-100 text-sm">
-                                <tr><td colspan="5" class="text-center py-8 text-slate-400"><i class="fas fa-circle-notch fa-spin mr-2"></i> Sinkronisasi log...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+          <div
+            class="bg-white border border-academic-border shadow-sm overflow-hidden"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[800px]">
+                <thead
+                  class="bg-slate-50 border-b border-academic-border text-xs uppercase tracking-wider text-slate-500 font-semibold"
+                >
+                  <tr>
+                    <th class="py-3 px-4 w-16 text-center">No</th>
+                    <th class="py-3 px-4">Nama Pendidik / Staf</th>
+                    <th class="py-3 px-4">Kredensial (Username)</th>
+                    <th class="py-3 px-4">Tingkat Akses</th>
+                    <th class="py-3 px-4 text-center">Tindakan</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm">
+                  {% for g in data_guru %}
+                  <tr
+                    class="hover:bg-slate-50 baris-akun"
+                    data-role="{{ g.role }}"
+                  >
+                    <td
+                      class="py-3 px-4 text-center text-slate-400 font-medium no-urut-akun"
+                    ></td>
+                    <td class="py-3 px-4 font-semibold text-academic-heading">
+                      {{ g.nama_lengkap }}
+                    </td>
+                    <td class="py-3 px-4 font-mono">{{ g.username }}</td>
+                    <td class="py-3 px-4">
+                      <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {% if g.role == 'admin' %} bg-purple-100 text-purple-700 {% elif g.role == 'guru' %} bg-blue-100 text-blue-700 {% else %} bg-amber-100 text-amber-700 {% endif %} border uppercase tracking-wide"
+                      >
+                        {{ g.role }} {% if g.role == 'pantau' and g.kelas_pantau
+                        %} ({{ g.kelas_pantau }}) {% endif %}
+                      </span>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                      <a
+                        href="/admin/hapus_guru/{{ g.id_guru }}"
+                        onclick="return confirm('Cabut akses akun {{ g.nama_lengkap }}?')"
+                        class="inline-flex items-center px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 rounded-sm text-xs font-semibold transition-colors"
+                      >
+                        <i class="fa-solid fa-trash mr-1"></i> Cabut Akses
+                      </a>
+                    </td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                    <td
+                      colspan="5"
+                      class="text-center py-8 text-slate-400 italic"
+                    >
+                      Belum ada akun guru yang terdaftar.
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
+          </div>
+        </div>
 
-        </main>
+        <div id="content-monitor" class="tab-content hidden">
+          <div class="mb-8 border-b border-academic-border pb-4">
+            <h2
+              class="text-3xl font-serif font-bold text-academic-heading tracking-tight"
+            >
+              Layar Monitor Kelas
+            </h2>
+            <p class="text-sm text-slate-500 mt-1">
+              Pilih kelas untuk membuka tautan TV pemantauan *real-time*.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for k in daftar_kelas %}
+            <div
+              class="bg-white border-t-4 border-t-academic-primary border-x border-b border-academic-border shadow-sm p-6 text-center hover:shadow-md transition-shadow group"
+            >
+              <div
+                class="w-16 h-16 mx-auto bg-blue-50 text-academic-primary rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+              >
+                <i class="fa-solid fa-chalkboard-user text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold text-academic-heading mb-1">
+                {{ k }}
+              </h3>
+              <p class="text-xs text-slate-400 mb-5">URL: /pantau/{{ k }}</p>
+              <a
+                href="/pantau/{{ k }}"
+                target="_blank"
+                class="inline-flex items-center justify-center w-full px-4 py-2 bg-slate-800 text-white text-sm font-semibold hover:bg-slate-900 transition-colors rounded-sm"
+              >
+                <i class="fa-solid fa-external-link-alt mr-2"></i> Buka Layar
+              </a>
+            </div>
+            {% else %}
+            <div
+              class="col-span-full text-center py-10 border-2 border-dashed border-slate-300 bg-slate-50"
+            >
+              <i
+                class="fa-solid fa-users-slash text-4xl text-slate-300 mb-3"
+              ></i>
+              <p class="text-slate-500 font-medium">
+                Belum ada data kelas yang terdeteksi.
+              </p>
+              <p class="text-sm text-slate-400">
+                Silakan tambahkan data siswa terlebih dahulu.
+              </p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="content-laporan" class="tab-content hidden">
+          <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-academic-border pb-4 gap-4"
+          >
+            <div>
+              <h2 class="text-2xl font-serif font-bold text-academic-heading">
+                Log Aktivitas Izin
+              </h2>
+              <p class="text-sm text-slate-500">
+                Pemantauan pergerakan siswa berdasarkan tanggal.
+              </p>
+            </div>
+            <div class="flex space-x-3">
+              <button
+                onclick="openModal('modalArsipLaporan')"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold shadow-sm transition-colors flex items-center"
+              >
+                <i class="fa-solid fa-box-archive mr-2"></i> Arsip Laporan
+              </button>
+              <a
+                href="/admin/export_laporan"
+                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm transition-colors flex items-center"
+              >
+                <i class="fa-solid fa-file-excel mr-2"></i> Ekspor (Hari Ini)
+              </a>
+            </div>
+          </div>
+
+          <div
+            class="flex items-center space-x-3 mb-4 bg-white p-3 border border-slate-200 shadow-sm rounded"
+          >
+            <label class="text-sm font-bold text-slate-600"
+              ><i
+                class="fa-solid fa-calendar-day text-academic-primary mr-1"
+              ></i>
+              Tanggal Pantau:</label
+            >
+            <input
+              type="date"
+              id="filter-tanggal-laporan"
+              min="2026-01-01"
+              class="border border-slate-300 rounded px-3 py-1 text-sm focus:outline-none focus:border-academic-primary"
+              onchange="updateLaporanLive()"
+            />
+            <span
+              class="text-xs text-slate-400 italic ml-2"
+              id="label-hari-laporan"
+              >Memuat hari ini...</span
+            >
+          </div>
+
+          <div
+            class="bg-white border border-academic-border shadow-sm overflow-hidden"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[800px]">
+                <thead
+                  class="bg-slate-50 border-b border-academic-border text-xs uppercase tracking-wider text-slate-500 font-semibold"
+                >
+                  <tr>
+                    <th class="py-3 px-4">Waktu Penerbitan</th>
+                    <th class="py-3 px-4">Kode Token</th>
+                    <th class="py-3 px-4">Kategori Izin</th>
+                    <th class="py-3 px-4">Status Terkini</th>
+                    <th class="py-3 px-4">Otorisator (Guru)</th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="tabel-laporan-live"
+                  class="divide-y divide-slate-100 text-sm"
+                >
+                  <tr>
+                    <td colspan="5" class="text-center py-8 text-slate-400">
+                      <i class="fas fa-circle-notch fa-spin mr-2"></i>
+                      Sinkronisasi log...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
-    <div id="modalTambahSiswa" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white border border-academic-border shadow-xl w-full max-w-lg">
-            <form action="/admin/tambah_siswa" method="POST">
-                <div class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center">
-                    <h5 class="font-serif font-bold text-academic-heading text-lg">Registrasi Siswa Baru</h5>
-                    <button type="button" onclick="closeModal('modalTambahSiswa')" class="text-slate-400 hover:text-red-500"><i class="fas fa-times text-lg"></i></button>
-                </div>
-                <div class="p-6 space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">UID Kartu RFID</label>
-                        <input type="text" name="rfid_uid" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm" placeholder="Contoh: 1234567890" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Nama Lengkap</label>
-                        <input type="text" name="nama" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm" placeholder="Nama resmi siswa" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Penempatan Kelas</label>
-                        <input type="text" name="kelas" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm" placeholder="Contoh: XII RPL 1" required>
-                    </div>
-                </div>
-                <div class="px-6 py-4 border-t border-academic-border bg-slate-50 flex justify-end space-x-3">
-                    <button type="button" onclick="closeModal('modalTambahSiswa')" class="px-4 py-2 border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-sm font-semibold transition-colors">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-academic-primary text-white hover:bg-academic-primaryHover text-sm font-semibold transition-colors shadow-sm">Simpan Data</button>
-                </div>
-            </form>
-        </div>
+    <div
+      id="modalPromosiKelas"
+      class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white border border-academic-border shadow-xl w-full max-w-md border-t-4 border-t-amber-500 rounded"
+      >
+        <form action="/admin/promosi_kelas" method="POST">
+          <div
+            class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center"
+          >
+            <h5 class="font-serif font-bold text-academic-heading text-lg">
+              <i class="fa-solid fa-angles-up text-amber-500 mr-2"></i> Promosi
+              Naik Kelas
+            </h5>
+            <button
+              type="button"
+              onclick="closeModal('modalPromosiKelas')"
+              class="text-slate-400 hover:text-red-500"
+            >
+              <i class="fas fa-times text-lg"></i>
+            </button>
+          </div>
+          <div class="p-6">
+            <p class="text-sm text-slate-600 mb-4">
+              Fitur ini akan memindahkan <strong>SELURUH</strong> siswa di kelas
+              <span
+                id="label-kelas-lama"
+                class="font-bold text-academic-primary"
+              ></span>
+              ke nama kelas yang baru.
+            </p>
+            <input type="hidden" name="kelas_lama" id="input_kelas_lama" />
+            <div>
+              <label
+                class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1"
+                >Nama Kelas Baru</label
+              >
+              <input
+                type="text"
+                name="kelas_baru"
+                class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-amber-500 text-sm"
+                placeholder="Contoh: XII RPL 1 (Ketik ALUMNI jika lulus)"
+                required
+              />
+            </div>
+          </div>
+          <div
+            class="px-6 py-4 border-t border-academic-border bg-slate-50 flex justify-end space-x-3"
+          >
+            <button
+              type="button"
+              onclick="closeModal('modalPromosiKelas')"
+              class="px-4 py-2 border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-sm font-semibold transition-colors rounded"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-amber-500 text-white hover:bg-amber-600 text-sm font-semibold transition-colors shadow-sm rounded"
+              onclick="
+                return confirm(
+                  'Peringatan: Aksi ini tidak bisa dibatalkan secara otomatis. Lanjutkan?',
+                );
+              "
+            >
+              Proses Pemindahan
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div id="modalEditSiswa" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white border border-academic-border shadow-xl w-full max-w-lg border-t-4 border-t-amber-500">
-            <form action="/admin/edit_siswa" method="POST">
-                <div class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center">
-                    <h5 class="font-serif font-bold text-academic-heading text-lg"><i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i> Koreksi Data Siswa</h5>
-                    <button type="button" onclick="closeModal('modalEditSiswa')" class="text-slate-400 hover:text-red-500"><i class="fas fa-times text-lg"></i></button>
-                </div>
-                <div class="p-6 space-y-4">
-                    <input type="hidden" name="id_siswa" id="edit_id_siswa" />
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">UID Kartu RFID</label>
-                        <input type="text" name="rfid_uid" id="edit_rfid_uid" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-amber-500 text-sm" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Nama Lengkap</label>
-                        <input type="text" name="nama" id="edit_nama" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-amber-500 text-sm" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Penempatan Kelas</label>
-                        <input type="text" name="kelas" id="edit_kelas" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-amber-500 text-sm" required>
-                    </div>
-                </div>
-                <div class="px-6 py-4 border-t border-academic-border bg-slate-50 flex justify-end space-x-3">
-                    <button type="button" onclick="closeModal('modalEditSiswa')" class="px-4 py-2 border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-sm font-semibold transition-colors">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-amber-500 text-white hover:bg-amber-600 text-sm font-semibold transition-colors shadow-sm">Simpan Perubahan</button>
-                </div>
-            </form>
+    <div
+      id="modalArsipLaporan"
+      class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white border border-academic-border shadow-xl w-full max-w-lg border-t-4 border-t-slate-800 rounded"
+      >
+        <div
+          class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center"
+        >
+          <h5 class="font-serif font-bold text-academic-heading text-lg">
+            <i class="fa-solid fa-box-archive text-slate-700 mr-2"></i> Arsip
+            Laporan Auto-Export
+          </h5>
+          <button
+            type="button"
+            onclick="closeModal('modalArsipLaporan')"
+            class="text-slate-400 hover:text-red-500"
+          >
+            <i class="fas fa-times text-lg"></i>
+          </button>
         </div>
+        <div class="p-6">
+          <p class="text-sm text-slate-500 mb-4">
+            Daftar laporan izin harian yang telah di-ekspor secara otomatis oleh
+            sistem pada pukul 18.00 WIB setiap harinya.
+          </p>
+          <div
+            class="border border-slate-200 rounded bg-slate-50 max-h-60 overflow-y-auto"
+          >
+            <table class="w-full text-left text-sm">
+              <tbody class="divide-y divide-slate-200">
+                <tr class="hover:bg-slate-100">
+                  <td class="px-4 py-3">
+                    <i class="fa-solid fa-file-csv text-emerald-600 mr-2"></i>
+                    Laporan_2026-04-24.csv
+                  </td>
+                  <td class="px-4 py-3 text-right">
+                    <a
+                      href="#"
+                      class="text-academic-primary font-semibold text-xs hover:underline"
+                      >Unduh</a
+                    >
+                  </td>
+                </tr>
+                <tr class="hover:bg-slate-100">
+                  <td class="px-4 py-3">
+                    <i class="fa-solid fa-file-csv text-emerald-600 mr-2"></i>
+                    Laporan_2026-04-23.csv
+                  </td>
+                  <td class="px-4 py-3 text-right">
+                    <a
+                      href="#"
+                      class="text-academic-primary font-semibold text-xs hover:underline"
+                      >Unduh</a
+                    >
+                  </td>
+                </tr>
+                <tr class="hover:bg-slate-100">
+                  <td class="px-4 py-3">
+                    <i class="fa-solid fa-file-csv text-emerald-600 mr-2"></i>
+                    Laporan_2026-04-22.csv
+                  </td>
+                  <td class="px-4 py-3 text-right">
+                    <a
+                      href="#"
+                      class="text-academic-primary font-semibold text-xs hover:underline"
+                      >Unduh</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div
+          class="px-6 py-4 border-t border-academic-border bg-slate-50 text-right"
+        >
+          <button
+            type="button"
+            onclick="closeModal('modalArsipLaporan')"
+            class="px-4 py-2 border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-sm font-semibold rounded"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div id="modalTambahGuru" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white border border-academic-border shadow-xl w-full max-w-lg border-t-4 border-t-academic-primary">
-            <form action="/admin/tambah_guru" method="POST">
-                <div class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center">
-                    <h5 class="font-serif font-bold text-academic-heading text-lg">Penerbitan Otoritas Akun</h5>
-                    <button type="button" onclick="closeModal('modalTambahGuru')" class="text-slate-400 hover:text-red-500"><i class="fas fa-times text-lg"></i></button>
-                </div>
-                <div class="p-6 space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Nama Beserta Gelar</label>
-                        <input type="text" name="nama_lengkap" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm" placeholder="Contoh: Budi Santoso, S.Kom" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Identitas Login (Username)</label>
-                        <input type="text" name="username" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm font-mono" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Kata Sandi</label>
-                        <input type="password" name="password" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-1">Tingkat Akses (Role)</label>
-                        <select name="role" class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm cursor-pointer">
-                            <option value="guru">Instruktur / Guru (Pembuat Izin)</option>
-                            <option value="admin">Administrator (Akses Penuh Sistem)</option>
-                            <option value="pantau">Auditor / Pemantau (Read-Only)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="px-6 py-4 border-t border-academic-border bg-slate-50 flex justify-end space-x-3">
-                    <button type="button" onclick="closeModal('modalTambahGuru')" class="px-4 py-2 border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-sm font-semibold transition-colors">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-academic-primary text-white hover:bg-academic-primaryHover text-sm font-semibold transition-colors shadow-sm">Simpan Kredensial</button>
-                </div>
-            </form>
-        </div>
+    <div
+      id="modalTambahSiswa"
+      class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity"
+    >
+      <div
+        class="bg-white border border-academic-border shadow-xl w-full max-w-lg rounded"
+      >
+        <form action="/admin/tambah_siswa" method="POST">
+          <div
+            class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center"
+          >
+            <h5 class="font-serif font-bold text-academic-heading text-lg">
+              Registrasi Siswa Baru
+            </h5>
+            <button
+              type="button"
+              onclick="closeModal('modalTambahSiswa')"
+              class="text-slate-400 hover:text-red-500"
+            >
+              <i class="fas fa-times text-lg"></i>
+            </button>
+          </div>
+          <div class="p-6 space-y-4">
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >UID Kartu RFID</label
+              ><input
+                type="text"
+                name="rfid_uid"
+                class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Nama Lengkap</label
+              ><input
+                type="text"
+                name="nama"
+                class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Penempatan Kelas</label
+              ><input
+                type="text"
+                name="kelas"
+                class="w-full px-3 py-2 bg-academic-bg border border-academic-border focus:bg-white focus:outline-none focus:border-academic-primary text-sm"
+                required
+              />
+            </div>
+          </div>
+          <div class="px-6 py-4 bg-slate-50 flex justify-end space-x-3">
+            <button
+              type="button"
+              onclick="closeModal('modalTambahSiswa')"
+              class="px-4 py-2 border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-sm font-semibold rounded"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-academic-primary text-white hover:bg-academic-primaryHover text-sm font-semibold rounded"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div id="modalImportSiswa" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white border border-academic-border shadow-xl w-full max-w-lg border-t-4 border-t-emerald-600">
-            <form action="/admin/import_siswa" method="POST" enctype="multipart/form-data">
-                <div class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center">
-                    <h5 class="font-serif font-bold text-academic-heading text-lg"><i class="fa-solid fa-file-import text-emerald-600 mr-2"></i> Unggah Massal (CSV)</h5>
-                    <button type="button" onclick="closeModal('modalImportSiswa')" class="text-slate-400 hover:text-red-500"><i class="fas fa-times text-lg"></i></button>
-                </div>
-                <div class="p-6">
-                    <div class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-sm text-xs mb-4">
-                        <strong class="block mb-1 font-bold">Instruksi Format Dokumen:</strong>
-                        Pastikan file .csv tidak memiliki baris *header*, urutan wajib:<br>
-                        1. UID Kartu (Angka)<br>
-                        2. Nama Siswa<br>
-                        3. Kode Kelas
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-academic-heading uppercase tracking-wider mb-2">Pilih Berkas Dokumen</label>
-                        <input type="file" name="file_csv" accept=".csv" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-academic-primary hover:file:bg-slate-200 cursor-pointer" required />
-                    </div>
-                </div>
-                <div class="px-6 py-4 border-t border-academic-border bg-slate-50 flex justify-end space-x-3">
-                    <button type="button" onclick="closeModal('modalImportSiswa')" class="px-4 py-2 border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-sm font-semibold transition-colors">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-emerald-600 text-white hover:bg-emerald-700 text-sm font-semibold transition-colors shadow-sm">Mulai Ekstraksi</button>
-                </div>
-            </form>
-        </div>
+    <div
+      id="modalEditSiswa"
+      class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white border border-academic-border shadow-xl w-full max-w-lg border-t-4 border-t-amber-500 rounded"
+      >
+        <form action="/admin/edit_siswa" method="POST">
+          <div
+            class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center"
+          >
+            <h5 class="font-serif font-bold text-academic-heading text-lg">
+              <i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i>
+              Koreksi Data
+            </h5>
+            <button
+              type="button"
+              onclick="closeModal('modalEditSiswa')"
+              class="text-slate-400 hover:text-red-500"
+            >
+              <i class="fas fa-times text-lg"></i>
+            </button>
+          </div>
+          <div class="p-6 space-y-4">
+            <input type="hidden" name="id_siswa" id="edit_id_siswa" />
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >UID Kartu RFID</label
+              ><input
+                type="text"
+                name="rfid_uid"
+                id="edit_rfid_uid"
+                class="w-full px-3 py-2 bg-academic-bg border border-academic-border text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Nama Lengkap</label
+              ><input
+                type="text"
+                name="nama"
+                id="edit_nama"
+                class="w-full px-3 py-2 bg-academic-bg border border-academic-border text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Penempatan Kelas</label
+              ><input
+                type="text"
+                name="kelas"
+                id="edit_kelas"
+                class="w-full px-3 py-2 bg-academic-bg border border-academic-border text-sm"
+                required
+              />
+            </div>
+          </div>
+          <div class="px-6 py-4 bg-slate-50 flex justify-end space-x-3">
+            <button
+              type="button"
+              onclick="closeModal('modalEditSiswa')"
+              class="px-4 py-2 border border-slate-300 bg-white hover:bg-slate-50 text-sm font-semibold rounded"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-amber-500 text-white hover:bg-amber-600 text-sm font-semibold rounded"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="modalTambahGuru"
+      class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white border border-academic-border shadow-xl w-full max-w-lg border-t-4 border-t-academic-primary rounded"
+      >
+        <form action="/admin/tambah_guru" method="POST">
+          <div
+            class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center"
+          >
+            <h5 class="font-serif font-bold text-academic-heading text-lg">
+              Penerbitan Otoritas Akun
+            </h5>
+            <button
+              type="button"
+              onclick="closeModal('modalTambahGuru')"
+              class="text-slate-400 hover:text-red-500"
+            >
+              <i class="fas fa-times text-lg"></i>
+            </button>
+          </div>
+          <div class="p-6 space-y-4">
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Nama</label
+              ><input
+                type="text"
+                name="nama_lengkap"
+                class="w-full px-3 py-2 border border-academic-border text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Username</label
+              ><input
+                type="text"
+                name="username"
+                class="w-full px-3 py-2 border border-academic-border text-sm font-mono"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Password</label
+              ><input
+                type="password"
+                name="password"
+                class="w-full px-3 py-2 border border-academic-border text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase mb-1"
+                >Tingkat Akses (Role)</label
+              >
+              <select
+                name="role"
+                id="pilih_role"
+                onchange="cekRolePantau()"
+                class="w-full px-3 py-2 border border-academic-border text-sm cursor-pointer"
+              >
+                <option value="guru">Instruktur / Guru (Pembuat Izin)</option>
+                <option value="admin">
+                  Administrator (Akses Penuh Sistem)
+                </option>
+                <option value="pantau">Auditor / Pemantau (Layar Kelas)</option>
+              </select>
+            </div>
+            <div id="form_kelas_pantau" class="hidden mt-4">
+              <label
+                class="block text-xs font-semibold text-amber-600 uppercase mb-1"
+                ><i class="fas fa-exclamation-circle"></i> Target Kelas</label
+              >
+              <input
+                type="text"
+                name="kelas_pantau"
+                id="input_kelas_pantau"
+                class="w-full px-3 py-2 bg-amber-50 border border-amber-200 text-sm"
+              />
+            </div>
+          </div>
+          <div class="px-6 py-4 bg-slate-50 flex justify-end space-x-3">
+            <button
+              type="button"
+              onclick="closeModal('modalTambahGuru')"
+              class="px-4 py-2 border border-slate-300 bg-white hover:bg-slate-50 text-sm font-semibold rounded"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-academic-primary text-white hover:bg-academic-primaryHover text-sm font-semibold rounded"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="modalImportSiswa"
+      class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white border border-academic-border shadow-xl w-full max-w-lg border-t-4 border-t-emerald-600 rounded"
+      >
+        <form
+          action="/admin/import_siswa"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div
+            class="px-6 py-4 border-b border-academic-border bg-academic-bg flex justify-between items-center"
+          >
+            <h5 class="font-serif font-bold text-academic-heading text-lg">
+              <i class="fa-solid fa-file-import text-emerald-600 mr-2"></i>
+              Unggah Massal (CSV)
+            </h5>
+            <button
+              type="button"
+              onclick="closeModal('modalImportSiswa')"
+              class="text-slate-400 hover:text-red-500"
+            >
+              <i class="fas fa-times text-lg"></i>
+            </button>
+          </div>
+          <div class="p-6">
+            <div
+              class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-sm text-xs mb-4"
+            >
+              <strong class="block mb-1 font-bold">Instruksi Format:</strong>
+              Urutan wajib: 1. UID Kartu | 2. Nama Siswa | 3. Kode Kelas (Tanpa
+              Header).
+            </div>
+            <input
+              type="file"
+              name="file_csv"
+              accept=".csv"
+              class="w-full text-sm"
+              required
+            />
+          </div>
+          <div class="px-6 py-4 bg-slate-50 flex justify-end space-x-3">
+            <button
+              type="button"
+              onclick="closeModal('modalImportSiswa')"
+              class="px-4 py-2 border border-slate-300 bg-white text-sm font-semibold rounded"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-emerald-600 text-white hover:bg-emerald-700 text-sm font-semibold rounded"
+            >
+              Ekstraksi
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script>
-        // 1. Fungsi Tabs Vanilla JS (Pengganti Bootstrap Nav)
-        function switchTab(tabId) {
-            // Sembunyikan semua konten
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            
-            // Reset semua tombol sidebar ke style inaktif
-            document.querySelectorAll('.tab-link').forEach(el => {
-                el.classList.remove('bg-slate-800', 'text-white', 'border-amber-500');
-                el.classList.add('text-slate-400', 'border-transparent');
+      // 1. Inisialisasi Tanggal Hari Ini untuk Laporan
+      document.addEventListener("DOMContentLoaded", () => {
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("filter-tanggal-laporan").value = today;
+        updateHariLaporan(today);
+        updateNomorUrutAkun(); // Set nomor tabel guru awal
+      });
+
+      // 2. Fungsi Filter Kalender
+      function updateHariLaporan(dateString) {
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const dateObj = new Date(dateString);
+        document.getElementById("label-hari-laporan").innerText =
+          dateObj.toLocaleDateString("id-ID", options);
+      }
+
+      // 3. Tab Switching
+      function switchTab(tabId) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((el) => el.classList.add("hidden"));
+        document.querySelectorAll(".tab-link").forEach((el) => {
+          el.classList.remove("bg-slate-800", "text-white", "border-amber-500");
+          el.classList.add("text-slate-400", "border-transparent");
+        });
+        document.getElementById("content-" + tabId).classList.remove("hidden");
+        const activeLink = document.getElementById("tab-" + tabId);
+        activeLink.classList.remove("text-slate-400", "border-transparent");
+        activeLink.classList.add(
+          "bg-slate-800",
+          "text-white",
+          "border-amber-500",
+        );
+      }
+
+      // 4. Sistem Tabel Siswa Berstruktur & Promosi
+      let currentKelas = "";
+      function bukaTabelKelas(kelas) {
+        currentKelas = kelas;
+        document.getElementById("view-grid-siswa").classList.add("hidden");
+        document.getElementById("view-tabel-siswa").classList.remove("hidden");
+
+        document.getElementById("label-kelas-aktif").innerText = kelas;
+        document.getElementById("label-kelas-lama").innerText = kelas;
+        document.getElementById("input_kelas_lama").value = kelas;
+
+        // Sembunyikan baris yang bukan kelasnya, hitung ulang nomor urut
+        let no = 1;
+        const baris = document.querySelectorAll(".baris-siswa");
+        baris.forEach((row) => {
+          if (row.getAttribute("data-kelas") === kelas) {
+            row.classList.remove("hidden");
+            row.querySelector(".no-urut").innerText = no++;
+          } else {
+            row.classList.add("hidden");
+          }
+        });
+      }
+
+      function tutupTabelKelas() {
+        document.getElementById("view-grid-siswa").classList.remove("hidden");
+        document.getElementById("view-tabel-siswa").classList.add("hidden");
+        currentKelas = "";
+      }
+
+      function bukaModalPromosi() {
+        if (currentKelas) {
+          openModal("modalPromosiKelas");
+        }
+      }
+
+      // 5. Sistem Filter Otoritas Akun Guru
+      function filterAkun(roleTarget, btnElement) {
+        // Ubah style tombol aktif
+        document.querySelectorAll(".btn-filter-akun").forEach((btn) => {
+          btn.classList.remove("bg-academic-primary", "text-white");
+          btn.classList.add("bg-slate-200", "text-slate-600");
+        });
+        btnElement.classList.remove("bg-slate-200", "text-slate-600");
+        btnElement.classList.add("bg-academic-primary", "text-white");
+
+        // Sembunyikan baris yang tidak sesuai
+        const baris = document.querySelectorAll(".baris-akun");
+        baris.forEach((row) => {
+          if (
+            roleTarget === "semua" ||
+            row.getAttribute("data-role") === roleTarget
+          ) {
+            row.classList.remove("hidden");
+          } else {
+            row.classList.add("hidden");
+          }
+        });
+        updateNomorUrutAkun();
+      }
+
+      function updateNomorUrutAkun() {
+        let no = 1;
+        document.querySelectorAll(".baris-akun:not(.hidden)").forEach((row) => {
+          row.querySelector(".no-urut-akun").innerText = no++;
+        });
+      }
+
+      // 6. Modal Global Control
+      function openModal(modalId) {
+        document.getElementById(modalId).classList.remove("hidden");
+
+        // [BARU] Jika yang dibuka adalah modal arsip, ambil data dari API
+        if (modalId === "modalArsipLaporan") {
+          const tbodyArsip = document.querySelector("#modalArsipLaporan tbody");
+          tbodyArsip.innerHTML =
+            '<tr><td colspan="2" class="px-4 py-4 text-center text-slate-500"><i class="fas fa-spinner fa-spin mr-2"></i>Mencari arsip...</td></tr>';
+
+          fetch("/api/admin/list_arsip")
+            .then((res) => res.json())
+            .then((data) => {
+              let html = "";
+              if (data.length === 0) {
+                html =
+                  '<tr><td colspan="2" class="px-4 py-6 text-center text-slate-400 italic">Belum ada arsip laporan yang di-generate.</td></tr>';
+              } else {
+                data.forEach((namaFile) => {
+                  html += `
+                                <tr class="hover:bg-slate-100 border-b border-slate-200 last:border-0">
+                                    <td class="px-4 py-3 font-mono text-slate-700">
+                                        <i class="fa-solid fa-file-csv text-emerald-600 mr-2"></i> ${namaFile}
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        <a href="/admin/download_arsip/${namaFile}" class="inline-block px-3 py-1 bg-academic-primary hover:bg-academic-primaryHover text-white font-semibold text-xs rounded transition-colors shadow-sm">
+                                            <i class="fas fa-download mr-1"></i> Unduh
+                                        </a>
+                                    </td>
+                                </tr>`;
+                });
+              }
+              tbodyArsip.innerHTML = html;
+            })
+            .catch((err) => {
+              tbodyArsip.innerHTML =
+                '<tr><td colspan="2" class="px-4 py-4 text-center text-red-500">Gagal memuat arsip.</td></tr>';
             });
-
-            // Tampilkan target dan aktifkan warna tombol
-            document.getElementById('content-' + tabId).classList.remove('hidden');
-            const activeLink = document.getElementById('tab-' + tabId);
-            activeLink.classList.remove('text-slate-400', 'border-transparent');
-            activeLink.classList.add('bg-slate-800', 'text-white', 'border-amber-500');
         }
+      }
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.add("hidden");
+      }
 
-        // 2. Fungsi Modals Vanilla JS (Pengganti Bootstrap Modal)
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-        function bukaModalEdit(id, rfid, nama, kelas) {
-            document.getElementById("edit_id_siswa").value = id;
-            document.getElementById("edit_rfid_uid").value = rfid;
-            document.getElementById("edit_nama").value = nama;
-            document.getElementById("edit_kelas").value = kelas;
-            openModal("modalEditSiswa");
-        }
+      function bukaModalEdit(id, rfid, nama, kelas) {
+        document.getElementById("edit_id_siswa").value = id;
+        document.getElementById("edit_rfid_uid").value = rfid;
+        document.getElementById("edit_nama").value = nama;
+        document.getElementById("edit_kelas").value = kelas;
+        openModal("modalEditSiswa");
+      }
 
-        // 3. AJAX Statistik Dashboard
-        function updateDashboardStats() {
-            fetch("/api/admin/dashboard_stats")
-                .then(response => response.json())
-                .then(data => {
-                    if (document.getElementById("stat-siswa")) {
-                        document.getElementById("stat-siswa").innerText = data.total_siswa || 0;
-                        document.getElementById("stat-guru").innerText = data.total_guru || 0;
-                        document.getElementById("stat-izin").innerText = data.izin_hari_ini || 0;
-                    }
-                }).catch(err => console.error("Gagal sinkronisasi statistik:", err));
+      function cekRolePantau() {
+        const role = document.getElementById("pilih_role").value;
+        const formKelas = document.getElementById("form_kelas_pantau");
+        const inputKelas = document.getElementById("input_kelas_pantau");
+        if (role === "pantau") {
+          formKelas.classList.remove("hidden");
+          inputKelas.setAttribute("required", "true");
+        } else {
+          formKelas.classList.add("hidden");
+          inputKelas.removeAttribute("required");
+          inputKelas.value = "";
         }
+      }
 
-        // 4. AJAX Laporan Live (Dengan penyesuaian Badge Tailwind)
-        function updateLaporanLive() {
-            fetch("/api/admin/laporan_live")
-                .then(response => response.json())
-                .then(data => {
-                    let html = "";
-                    if (data.length === 0) {
-                        html = '<tr><td colspan="5" class="text-center text-slate-400 py-8 italic">Log sistem masih kosong.</td></tr>';
-                    } else {
-                        data.forEach(row => {
-                            let badgeClass = row.status === "WAITING" 
-                                ? "bg-amber-50 text-amber-700 border border-amber-200" 
-                                : "bg-emerald-50 text-emerald-700 border border-emerald-200";
-                            let iconStatus = row.status === "WAITING" 
-                                ? '<i class="fas fa-clock mr-1"></i>' 
-                                : '<i class="fas fa-check-circle mr-1"></i>';
+      // 7. API Fetch Laporan & Statistik
+      function updateDashboardStats() {
+        fetch("/api/admin/dashboard_stats")
+          .then((res) => res.json())
+          .then((data) => {
+            if (document.getElementById("stat-siswa")) {
+              document.getElementById("stat-siswa").innerText =
+                data.total_siswa || 0;
+              document.getElementById("stat-guru").innerText =
+                data.total_guru || 0;
+              document.getElementById("stat-izin").innerText =
+                data.izin_hari_ini || 0;
+            }
+          })
+          .catch((err) => console.error("Error stat:", err));
+      }
 
-                            html += `
+      function updateLaporanLive() {
+        const tanggalPilihan = document.getElementById(
+          "filter-tanggal-laporan",
+        ).value;
+        updateHariLaporan(tanggalPilihan);
+
+        // [PENTING] Mengirimkan parameter tanggal ke API Python
+        fetch(`/api/admin/laporan_live?tanggal=${tanggalPilihan}`)
+          .then((res) => res.json())
+          .then((data) => {
+            let html = "";
+            if (data.length === 0) {
+              html =
+                '<tr><td colspan="5" class="text-center text-slate-400 py-8 italic">Log sistem masih kosong pada tanggal ini.</td></tr>';
+            } else {
+              data.forEach((row) => {
+                let badgeClass = "";
+                let iconStatus = "";
+                if (row.status === "MENUNGGU") {
+                  badgeClass = "bg-slate-100 text-slate-600 border-slate-300";
+                  iconStatus = '<i class="fas fa-clock mr-1"></i>';
+                } else if (row.status === "SEDANG_KELUAR") {
+                  badgeClass = "bg-amber-50 text-amber-700 border-amber-300";
+                  iconStatus = '<i class="fas fa-running mr-1"></i>';
+                } else if (row.status === "KEMBALI") {
+                  badgeClass =
+                    "bg-emerald-50 text-emerald-700 border-emerald-300";
+                  iconStatus = '<i class="fas fa-home mr-1"></i>';
+                } else if (row.status === "SELESAI") {
+                  badgeClass = "bg-blue-50 text-blue-700 border-blue-300";
+                  iconStatus = '<i class="fas fa-check-double mr-1"></i>';
+                }
+
+                html += `
                                 <tr class="update-row hover:bg-slate-50 transition-colors">
                                     <td class="py-3 px-4 font-medium text-slate-600">${row.waktu_dibuat || "-"}</td>
                                     <td class="py-3 px-4 font-mono font-bold text-academic-primary">${row.kode_token}</td>
                                     <td class="py-3 px-4 font-semibold text-slate-700">${row.jenis_izin}</td>
-                                    <td class="py-3 px-4"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${badgeClass}">${iconStatus} ${row.status}</span></td>
+                                    <td class="py-3 px-4"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeClass}">${iconStatus} ${row.status}</span></td>
                                     <td class="py-3 px-4 text-slate-600">${row.nama_guru || "Sistem Otorisasi"}</td>
                                 </tr>
                             `;
-                        });
-                    }
-                    
-                    const tbody = document.getElementById("tabel-laporan-live");
-                    if (tbody && tbody.innerHTML !== html) {
-                        tbody.innerHTML = html;
-                    }
-                }).catch(err => console.error("Gagal sinkronisasi laporan:", err));
-        }
+              });
+            }
+            document.getElementById("tabel-laporan-live").innerHTML = html;
+          })
+          .catch((err) => console.error("Error laporan:", err));
+      }
 
-        // 5. Inisialisasi Eksekusi
+      // Loop Sinkronisasi
+      updateDashboardStats();
+      setInterval(() => {
         updateDashboardStats();
         updateLaporanLive();
-        setInterval(() => {
-            updateDashboardStats();
-            updateLaporanLive();
-        }, 3000);
+      }, 3000);
     </script>
-</body>
+  </body>
 </html>
